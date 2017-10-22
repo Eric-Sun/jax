@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jax.iml" filepath="$PROJECT_DIR$/jax.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api/jax-api.iml" filepath="$PROJECT_DIR$/api/jax-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/jax-core.iml" filepath="$PROJECT_DIR$/core/jax-core.iml" />
+    </modules>
+  </component>
+</project>
