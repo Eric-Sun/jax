@@ -14,7 +14,25 @@ public class AlbumInfo {
      */
     private int remoteAlbumId;
     private int tagId;
+    private String sourceName;
+    private String tagName;
     private String title;
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
 
     public int getTagId() {
         return tagId;

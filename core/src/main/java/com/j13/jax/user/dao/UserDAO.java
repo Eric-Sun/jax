@@ -38,4 +38,10 @@ public class UserDAO {
         });
     }
 
+    public int randomUser() {
+        String sql = "select id from user ORDER BY RAND() LIMIT 1";
+        return j.queryForObject(sql, new Object[]{}, Integer.class);
+    }
+
+
 }

@@ -4,14 +4,20 @@ import com.alibaba.fastjson.JSON;
 import com.j13.jax.core.Constants;
 import com.j13.jax.core.PropertiesKey;
 import com.j13.jax.event.dao.AlbumDAO;
+import com.j13.jax.event.dao.EventDAO;
 import com.j13.jax.event.dao.SystemFamilyCursorDAO;
+import com.j13.jax.event.req.EventAddReq;
 import com.j13.jax.event.req.EventListReq;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
+import com.j13.jax.event.vo.EventVO;
 import com.j13.jax.event.vo.TripleImgContentVO;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.config.PropertiesConfiguration;
 import com.j13.poppy.core.CommandContext;
+import com.j13.poppy.core.CommonResultResp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +25,14 @@ import java.util.List;
 
 @Component
 public class EventFacade {
+    private static Logger LOG = LoggerFactory.getLogger(EventFacade.class);
 
     @Autowired
     SystemFamilyCursorDAO systemFamilyCursorDAO;
     @Autowired
     AlbumDAO albumDAO;
+    @Autowired
+    EventDAO eventDAO;
 
 
     @Action(name = "event.list", desc = "event list in family.")
@@ -72,4 +81,19 @@ public class EventFacade {
         return new StringBuilder().append(server).append("/").append(albumId).append("/").append(imgId).append(".jpg").toString();
     }
 
+
+    @Action(name="event.add",desc="添加event")
+    public CommonResultResp add(CommandContext ctxt, EventAddReq req) {
+
+        EventVO eventVO = new EventVO();
+        eventVO.setContent(req.getContent());
+        eventVO.setFamilyId(req.getFamilyId());
+        eventVO.setTitle(req.getTitle());
+        eventVO.setType(req.getType());
+        eventVO.setUserId(req.getUserId());
+
+        int eventId = eventDAO.add(eventVO);
+        LOG.info("event add successfully. id={}", eventId);
+        return CommonResultResp.success();
+    }
 }

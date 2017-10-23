@@ -27,7 +27,7 @@ public class FetchIndexDAO {
                 PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 pstmt.setInt(1, sourceId);
                 pstmt.setInt(2, lastIndex);
-                return null;
+                return pstmt;
             }
         }, holder);
         return holder.getKey().intValue();
@@ -35,7 +35,7 @@ public class FetchIndexDAO {
 
 
     public int getLastIndex(int sourceId) {
-        String sql = "select last_index from fetch_index where source=? order by id desc limit 1";
+        String sql = "select last_index from fetch_index where source_id=? order by id desc limit 1";
         return j.queryForObject(sql, new Object[]{sourceId}, Integer.class);
     }
 

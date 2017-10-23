@@ -32,7 +32,7 @@
     <bytecodeTargetLevel target="1.8">
       <module name="garen-core" target="1.6" />
       <module name="jax" target="1.6" />
-      <module name="jax-core" target="1.6" />
+      <module name="jax-core" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

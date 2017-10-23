@@ -72,4 +72,23 @@ public class AlbumDAO {
         return j.queryForInt(sql, new Object[]{remoteAlbumId});
     }
 
+    public AlbumInfo getAlbum(int albumId) {
+        String sql = "select a.source_id,fs.name,a.remote_album_id,a.tag_id,`at`.name,a.title from album a " +
+                "left outer join fetch_source fs on fs.id=a.source_id " +
+                "left outer join album_tag `at` on `at`.id=a.tag_id " +
+                "where a.id=?";
+        return j.queryForObject(sql, new Object[]{albumId}, new RowMapper<AlbumInfo>() {
+            @Override
+            public AlbumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                AlbumInfo ai = new AlbumInfo();
+                ai.setSourceId(rs.getInt(1));
+                ai.setSourceName(rs.getString(2));
+                ai.setRemoteAlbumId(rs.getInt(3));
+                ai.setTagId(rs.getInt(4));
+                ai.setTagName(rs.getString(5));
+                ai.setTitle(rs.getString(6));
+                return ai;
+            }
+        });
+    }
 }

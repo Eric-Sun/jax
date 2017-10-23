@@ -23,8 +23,8 @@ public class EventDAO {
     public int add(final EventVO eventVO) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String sql = "insert into event" +
-                "(family_id,user_id,title,content,createtime) values " +
-                "(?,?,?,?,now())";
+                "(family_id,user_id,title,content,createtime,`type`) values " +
+                "(?,?,?,?,now(),?)";
         j.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -33,13 +33,12 @@ public class EventDAO {
                 pstmt.setInt(2, eventVO.getUserId());
                 pstmt.setString(3, eventVO.getTitle());
                 pstmt.setString(4, eventVO.getContent());
+                pstmt.setInt(5, eventVO.getType());
                 return pstmt;
             }
         }, holder);
         return holder.getKey().intValue();
     }
-
-
 
 
 }

@@ -2,9 +2,12 @@ package com.j13.jax.fetcher.facade;
 
 import com.j13.jax.event.dao.AlbumDAO;
 import com.j13.jax.event.dao.ImgDAO;
+import com.j13.jax.event.req.EventGetAlbumReq;
+import com.j13.jax.event.resp.EventGetAlbumResp;
 import com.j13.jax.fetcher.FetcherSourceService;
 import com.j13.jax.fetcher.dao.FetchIndexDAO;
 import com.j13.jax.fetcher.req.*;
+import com.j13.jax.fetcher.resp.FetcherAlbumAddResp;
 import com.j13.jax.fetcher.resp.FetcherGetAlbumIdResp;
 import com.j13.jax.fetcher.resp.FetcherGetLastIndexResp;
 import com.j13.jax.fetcher.vo.AlbumInfo;
@@ -12,6 +15,7 @@ import com.j13.jax.fetcher.vo.RemoteImgInfo;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.core.CommandContext;
 import com.j13.poppy.core.CommonResultResp;
+import com.j13.poppy.util.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +36,8 @@ public class FetcherFacade {
     FetchIndexDAO fetchIndexDAO;
 
     @Action(name = "fetcher.albumAdd", desc = "创建一个album")
-    public CommonResultResp albumAdd(CommandContext ctxt, FetcherAlbumAddReq req) {
+    public FetcherAlbumAddResp albumAdd(CommandContext ctxt, FetcherAlbumAddReq req) {
+        FetcherAlbumAddResp resp = new FetcherAlbumAddResp();
         int sourceId = req.getSourceId();
         int remoteAlbumId = req.getRemoteAlbumId();
         String title = req.getTitle();
@@ -47,7 +52,8 @@ public class FetcherFacade {
 
         int id = albumDAO.addAlbum(ai);
         LOG.info("add album success. id={}", id);
-        return CommonResultResp.success();
+        resp.setAlbumId(id);
+        return resp;
     }
 
 
@@ -114,6 +120,17 @@ public class FetcherFacade {
             resp.setIndex(0);
 
         }
+        return resp;
+    }
+
+
+    @Action(name = "fetcher.getAlbum", desc = "")
+    public EventGetAlbumResp getAlbum(CommandContext ctxt, EventGetAlbumReq req) {
+        int albumId = req.getAlbumId();
+        EventGetAlbumResp resp = new EventGetAlbumResp();
+        AlbumInfo ai = albumDAO.getAlbum(albumId);
+
+        BeanUtils.copyProperties(resp, ai);
         return resp;
     }
 }
