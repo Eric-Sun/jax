@@ -5,17 +5,26 @@ import com.j13.jax.core.Constants;
 import com.j13.jax.core.PropertiesKey;
 import com.j13.jax.event.dao.AlbumDAO;
 import com.j13.jax.event.dao.EventDAO;
+import com.j13.jax.event.dao.ImgDAO;
 import com.j13.jax.event.dao.SystemFamilyCursorDAO;
 import com.j13.jax.event.req.EventAddReq;
+import com.j13.jax.event.req.EventGetReq;
 import com.j13.jax.event.req.EventListReq;
+import com.j13.jax.event.resp.EventGetResp;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
 import com.j13.jax.event.vo.EventVO;
+import com.j13.jax.event.vo.ImgVO;
+import com.j13.jax.event.vo.TripleDetailContent;
 import com.j13.jax.event.vo.TripleImgContentVO;
+import com.j13.jax.fetcher.vo.AlbumInfo;
+import com.j13.jax.user.dao.UserDAO;
+import com.j13.jax.user.vo.UserVO;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.config.PropertiesConfiguration;
 import com.j13.poppy.core.CommandContext;
 import com.j13.poppy.core.CommonResultResp;
+import com.j13.poppy.util.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +42,10 @@ public class EventFacade {
     AlbumDAO albumDAO;
     @Autowired
     EventDAO eventDAO;
+    @Autowired
+    UserDAO userDAO;
+    @Autowired
+    ImgDAO imgDAO;
 
 
     @Action(name = "event.list", desc = "event list in family.")
@@ -47,15 +60,18 @@ public class EventFacade {
             boolean existed = systemFamilyCursorDAO.checkExisted(userId, familyId);
             int fromCursorId = 0;
             if (!existed) {
-                fromCursorId = PropertiesConfiguration.getInstance().getIntValue(PropertiesKey.IMG_FIRST_ID);
+                fromCursorId = eventDAO.getLeastMEINVId();
+//                fromCursorId = PropertiesConfiguration.getInstance().getIntValue(PropertiesKey.IMG_FIRST_ID);
                 systemFamilyCursorDAO.insert(userId, familyId, fromCursorId);
             } else {
                 fromCursorId = systemFamilyCursorDAO.getCursorId(userId, familyId);
             }
 
-            // 获取下5条
-            List<Integer> list = albumDAO.idList(fromCursorId, 5);
-            for (Integer albumId : list) {
+            int toCursorId = 0;
+            // 获取下N条
+            List<EventVO> list = eventDAO.MEINVIdList(fromCursorId, 2);
+            for (EventVO eventVO : list) {
+                int albumId = new Integer(eventVO.getContent());
                 EventSimpleGetResp getResp = new EventSimpleGetResp();
 
                 String img1 = getImgUrl(albumId, 1);
@@ -71,7 +87,11 @@ public class EventFacade {
                 getResp.setType(Constants.EventType.TRIPLE_IMG);
                 getResp.setTitle("");
                 resp.getList().add(getResp);
+                toCursorId = eventVO.getId();
             }
+
+            // update new cursor
+            systemFamilyCursorDAO.update(userId, familyId, toCursorId);
         }
         return resp;
     }
@@ -82,7 +102,7 @@ public class EventFacade {
     }
 
 
-    @Action(name="event.add",desc="添加event")
+    @Action(name = "event.add", desc = "添加event")
     public CommonResultResp add(CommandContext ctxt, EventAddReq req) {
 
         EventVO eventVO = new EventVO();
@@ -95,5 +115,36 @@ public class EventFacade {
         int eventId = eventDAO.add(eventVO);
         LOG.info("event add successfully. id={}", eventId);
         return CommonResultResp.success();
+    }
+
+    private String getUserImgUrl(String imgUrl) {
+        return PropertiesConfiguration.getInstance().getStringValue("img.server") + "/" + imgUrl;
+    }
+
+    @Action(name = "event.get", desc = "")
+    public EventGetResp get(CommandContext ctxt, EventGetReq req) {
+        EventGetResp resp = new EventGetResp();
+        if (req.getFamilyId() == Constants.SystemFamily.MEINV) {
+
+            EventVO vo = eventDAO.get(req.getEventId());
+            UserVO userVO = userDAO.getUserNameAndImg(vo.getUserId());
+
+            vo.setUserName(userVO.getNickName());
+            vo.setUserImgUrl(getUserImgUrl(userVO.getImg()));
+            int albumId = new Integer(vo.getContent());
+            List<ImgVO> imgList = imgDAO.list(albumId);
+            String title = albumDAO.getAlbumTitle(albumId);
+            TripleDetailContent c = new TripleDetailContent();
+            for (ImgVO imgVO : imgList) {
+                String url = getImgUrl(albumId, imgVO.getRemoteImgId());
+                c.getImgList().add(url);
+            }
+
+            BeanUtils.copyProperties(resp, vo);
+            resp.setContent(JSON.toJSONString(c));
+            resp.setTitle(title);
+        }
+
+        return resp;
     }
 }

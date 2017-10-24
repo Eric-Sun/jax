@@ -31,7 +31,7 @@ public class UserDAO {
                 UserVO vo = new UserVO();
                 vo.setId(userId);
                 vo.setNickName(rs.getString(1));
-                vo.setImgUrl(rs.getString(2));
+                vo.setImg(rs.getString(2));
                 vo.setIsMachine(rs.getInt(3));
                 return vo;
             }
@@ -44,4 +44,16 @@ public class UserDAO {
     }
 
 
+    public UserVO getUserNameAndImg(int userId) {
+        String sql = "select nick_name,img from user where id=? and deleted=?";
+        return j.queryForObject(sql, new Object[]{userId, Constants.DB.NOT_DELETED}, new RowMapper<UserVO>() {
+            @Override
+            public UserVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                UserVO vo = new UserVO();
+                vo.setNickName(rs.getString(1));
+                vo.setImg(rs.getString(2));
+                return vo;
+            }
+        });
+    }
 }

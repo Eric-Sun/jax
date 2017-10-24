@@ -66,7 +66,7 @@ public class SystemFamilyCursorDAO {
                 pstmt.setInt(1, userId);
                 pstmt.setInt(2, familyId);
                 pstmt.setInt(3, firstCursorId);
-                return null;
+                return pstmt;
             }
         }, holder);
 

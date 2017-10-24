@@ -91,4 +91,12 @@ public class AlbumDAO {
             }
         });
     }
+
+
+    public String getAlbumTitle(int albumId) {
+        String sql = "select title from album where id=?";
+        return j.queryForObject(sql, new Object[]{albumId}, String.class);
+    }
+
+
 }

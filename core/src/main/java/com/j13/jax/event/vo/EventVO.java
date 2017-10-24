@@ -8,10 +8,19 @@ public class EventVO {
     private int id;
     private int familyId;
     private int userId;
+    private String userName;
     private String title;
     private String content;
-    private Date createtime;
+    private long createtime;
+    private String userImgUrl;
 
+    public String getUserImgUrl() {
+        return userImgUrl;
+    }
+
+    public void setUserImgUrl(String userImgUrl) {
+        this.userImgUrl = userImgUrl;
+    }
 
     public int getType() {
         return type;
@@ -29,12 +38,24 @@ public class EventVO {
         this.content = content;
     }
 
-    public Date getCreatetime() {
+    public long getCreatetime() {
         return createtime;
     }
 
-    public void setCreatetime(Date createtime) {
+    public void setCreatetime(long createtime) {
         this.createtime = createtime;
+    }
+
+    public int getTRIPLE_IMG() {
+        return TRIPLE_IMG;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public int getFamilyId() {

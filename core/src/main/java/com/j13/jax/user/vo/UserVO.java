@@ -4,7 +4,7 @@ public class UserVO {
 
     private int id;
     private String nickName;
-    private String imgUrl;
+    private String img;
     private int isMachine;
 
     public int getIsMachine() {
@@ -23,12 +23,12 @@ public class UserVO {
         this.id = id;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImg() {
+        return img;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getNickName() {

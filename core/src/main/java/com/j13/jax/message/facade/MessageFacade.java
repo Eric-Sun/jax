@@ -84,13 +84,13 @@ public class MessageFacade {
             messageGetResp.setContent(vo.getContent());
             messageGetResp.setCreatetime(vo.getCreatetime().getTime());
             UserVO fromUserInfo = userDAO.getUserInfo(vo.getFromUserId());
-            messageGetResp.setFromUserHeadImgUrl(fromUserInfo.getImgUrl());
+            messageGetResp.setFromUserHeadImgUrl(fromUserInfo.getImg());
             messageGetResp.setFromUserName(fromUserInfo.getNickName());
             messageGetResp.setFromUserId(vo.getFromUserId());
             messageGetResp.setToUserId(vo.getToUserId());
             UserVO toUserInfo = userDAO.getUserInfo(vo.getToUserId());
             messageGetResp.setToUserName(toUserInfo.getNickName());
-            messageGetResp.setToUserHeadImgUrl(toUserInfo.getImgUrl());
+            messageGetResp.setToUserHeadImgUrl(toUserInfo.getImg());
             messageGetResp.setRead(vo.getRead());
             messageGetResp.setMessageId(vo.getId());
             resp.getList().add(messageGetResp);
