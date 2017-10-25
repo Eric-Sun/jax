@@ -1,6 +1,7 @@
 package com.j13.jax.event.req;
 
 import com.j13.poppy.anno.Parameter;
+import org.apache.commons.fileupload.FileItem;
 
 public class EventAddReq {
     @Parameter(desc="")
@@ -13,6 +14,7 @@ public class EventAddReq {
     private String title;
     @Parameter(desc="")
     private String content;
+
 
     public String getContent() {
         return content;

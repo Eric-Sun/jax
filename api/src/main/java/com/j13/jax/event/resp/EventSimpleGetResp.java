@@ -7,14 +7,14 @@ public class EventSimpleGetResp {
     private int type;
     @Parameter(desc="标题")
     private String title;
-    @Parameter(desc="内容，为json，字符串，客户端通过type进行相应的解析")
-    private String content;
+    @Parameter(desc="内容为Object，客户端通过type进行解析")
+    private Object content;
 
-    public String getContent() {
+    public Object getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Object content) {
         this.content = content;
     }
 

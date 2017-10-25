@@ -46,14 +46,11 @@ public class Constants {
         public static int OFFLINE = 0;
     }
 
-    public static class SystemFamily {
-        public static int MEINV = -1;
-        public static int DZ = -2;
-    }
-
     public static class EventType {
         public static int TRIPLE_IMG = 0;
         public static int FETCHED_TRIPLE_IMG = -1;
         public static int FETCHED_DZ = -2;
+        public static int MEINV = -1;
+        public static int DZ = -2;
     }
 }
