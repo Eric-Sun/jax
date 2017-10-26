@@ -4,13 +4,13 @@ import com.j13.poppy.anno.Parameter;
 
 public class EventGetAlbumReq {
     @Parameter(desc="")
-    private int albumId;
+    private int mvAlbumId;
 
-    public int getAlbumId() {
-        return albumId;
+    public int getMvAlbumId() {
+        return mvAlbumId;
     }
 
-    public void setAlbumId(int albumId) {
-        this.albumId = albumId;
+    public void setMvAlbumId(int mvAlbumId) {
+        this.mvAlbumId = mvAlbumId;
     }
 }

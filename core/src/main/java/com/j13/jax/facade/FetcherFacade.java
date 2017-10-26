@@ -7,11 +7,11 @@ import com.j13.jax.event.resp.EventGetAlbumResp;
 import com.j13.jax.service.FetcherSourceService;
 import com.j13.jax.dao.FetchIndexDAO;
 import com.j13.jax.fetcher.req.*;
-import com.j13.jax.fetcher.resp.FetcherAlbumAddResp;
-import com.j13.jax.fetcher.resp.FetcherGetAlbumIdResp;
+import com.j13.jax.fetcher.resp.FetcherMVAlbumAddResp;
+import com.j13.jax.fetcher.resp.FetcherGetMVAlbumIdResp;
 import com.j13.jax.fetcher.resp.FetcherGetLastIndexResp;
-import com.j13.jax.vo.AlbumInfo;
-import com.j13.jax.vo.RemoteImgInfo;
+import com.j13.jax.vo.MVAlbumVO;
+import com.j13.jax.vo.MVImgVO;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.core.CommandContext;
 import com.j13.poppy.core.CommonResultResp;
@@ -35,62 +35,62 @@ public class FetcherFacade {
     @Autowired
     FetchIndexDAO fetchIndexDAO;
 
-    @Action(name = "fetcher.albumAdd", desc = "创建一个album")
-    public FetcherAlbumAddResp albumAdd(CommandContext ctxt, FetcherAlbumAddReq req) {
-        FetcherAlbumAddResp resp = new FetcherAlbumAddResp();
+    @Action(name = "fetcher.mvAlbumAdd", desc = "创建一个mv_album")
+    public FetcherMVAlbumAddResp mvAlbumAdd(CommandContext ctxt, FetcherMVAlbumAddReq req) {
+        FetcherMVAlbumAddResp resp = new FetcherMVAlbumAddResp();
         int sourceId = req.getSourceId();
         int remoteAlbumId = req.getRemoteAlbumId();
         String title = req.getTitle();
         int tagId = req.getTagId();
         fetcherSourceService.check(sourceId);
 
-        AlbumInfo ai = new AlbumInfo();
+        MVAlbumVO ai = new MVAlbumVO();
         ai.setRemoteAlbumId(remoteAlbumId);
         ai.setSourceId(sourceId);
         ai.setTitle(title);
         ai.setTagId(tagId);
 
-        int id = MVAlbumDAO.addAlbum(ai);
-        LOG.info("add album success. id={}", id);
-        resp.setAlbumId(id);
+        int id = MVAlbumDAO.addMVAlbum(ai);
+        LOG.info("add mv_album success. id={}", id);
+        resp.setMvAlbumId(id);
         return resp;
     }
 
 
-    @Action(name = "fetcher.checkAlbumExist", desc = "检测这个album是否存在")
-    public CommonResultResp checkAlbumExist(CommandContext ctxt, FetcherCheckAlbumExistReq req) {
+    @Action(name = "fetcher.checkMVAlbumExist", desc = "检测这个mvalbum是否存在")
+    public CommonResultResp checkMVAlbumExist(CommandContext ctxt, FetcherCheckMVAlbumExistReq req) {
         int remoteAlbumId = req.getRemoteAlbumId();
-        if (MVAlbumDAO.checkAlbumExist(remoteAlbumId)) {
+        if (MVAlbumDAO.checkMVAlbumExist(remoteAlbumId)) {
             return CommonResultResp.success();
         } else {
             return CommonResultResp.failure();
         }
     }
 
-    @Action(name = "fetcher.getAlbumId", desc = "获取v3中的albumId")
-    public FetcherGetAlbumIdResp getAlbumId(CommandContext ctxt, FetcherGetAlbumIdReq req) {
-        FetcherGetAlbumIdResp r = new FetcherGetAlbumIdResp();
+    @Action(name = "fetcher.getMVAlbumId", desc = "获取v3中的mvAlbumId")
+    public FetcherGetMVAlbumIdResp getMVAlbumId(CommandContext ctxt, FetcherGetMVAlbumIdReq req) {
+        FetcherGetMVAlbumIdResp r = new FetcherGetMVAlbumIdResp();
         int remoteAlbumId = req.getRemoteAlbumId();
 
-        int albumId = MVAlbumDAO.getAlbumId(remoteAlbumId);
-        r.setId(albumId);
+        int mvAlbumId = MVAlbumDAO.getMVAlbumId(remoteAlbumId);
+        r.setId(mvAlbumId);
         return r;
     }
 
-    @Action(name = "fetcher.imgAdd", desc = "添加img")
-    public CommonResultResp imgAdd(CommandContext ctxt, FetcherImgAddReq req) {
-        RemoteImgInfo rii = new RemoteImgInfo();
-        rii.setAlbumId(req.getAlbumId());
+    @Action(name = "fetcher.mvImgAdd", desc = "添加mv_img")
+    public CommonResultResp mvImgAdd(CommandContext ctxt, FetcherMVImgAddReq req) {
+        MVImgVO rii = new MVImgVO();
+        rii.setMvAlbumId(req.getMvAlbumId());
         rii.setRelationLocalPath(req.getRelationLocalPath());
         rii.setRemoteImgId(req.getRemoteImgId());
         rii.setRemoteImgUrl(req.getRemoteUrl());
         int id = MVImgDAO.add(rii);
-        LOG.info("img add success. id={}", id);
+        LOG.info("mv_img add success. id={}", id);
         return CommonResultResp.success();
     }
 
-    @Action(name = "fetcher.checkImgExist", desc = "查看img是否存在")
-    public CommonResultResp checkImgExist(CommandContext ctxt, FetcherCheckImgExistByRemoteUrlReq req) {
+    @Action(name = "fetcher.checkMVImgExist", desc = "查看mv_img是否存在")
+    public CommonResultResp checkMVImgExist(CommandContext ctxt, FetcherCheckMVImgExistByRemoteUrlReq req) {
         String remoteImgUrl = req.getRemoteImgUrl();
         boolean exist = MVImgDAO.checkImgExist(remoteImgUrl);
         if (exist)
@@ -124,11 +124,11 @@ public class FetcherFacade {
     }
 
 
-    @Action(name = "fetcher.getAlbum", desc = "")
-    public EventGetAlbumResp getAlbum(CommandContext ctxt, EventGetAlbumReq req) {
-        int albumId = req.getAlbumId();
+    @Action(name = "fetcher.getMVAlbum", desc = "")
+    public EventGetAlbumResp getMVAlbum(CommandContext ctxt, EventGetAlbumReq req) {
+        int albumId = req.getMvAlbumId();
         EventGetAlbumResp resp = new EventGetAlbumResp();
-        AlbumInfo ai = MVAlbumDAO.getAlbum(albumId);
+        MVAlbumVO ai = MVAlbumDAO.getMVAlbum(albumId);
 
         BeanUtils.copyProperties(resp, ai);
         return resp;

@@ -12,7 +12,7 @@ public class EventGetResp {
     @Parameter(desc="")
     private String title;
     @Parameter(desc="")
-    private String content;
+    private Object content;
     @Parameter(desc="")
     private long createtime;
     @Parameter(desc="")
@@ -38,11 +38,11 @@ public class EventGetResp {
 
 
 
-    public String getContent() {
+    public Object getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Object content) {
         this.content = content;
     }
 

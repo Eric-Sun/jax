@@ -9,6 +9,26 @@ public class EventSimpleGetResp {
     private String title;
     @Parameter(desc="内容为Object，客户端通过type进行解析")
     private Object content;
+    @Parameter(desc="用户头像地址")
+    private String userHeadUrl;
+    @Parameter(desc="")
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserHeadUrl() {
+        return userHeadUrl;
+    }
+
+    public void setUserHeadUrl(String userHeadUrl) {
+        this.userHeadUrl = userHeadUrl;
+    }
 
     public Object getContent() {
         return content;

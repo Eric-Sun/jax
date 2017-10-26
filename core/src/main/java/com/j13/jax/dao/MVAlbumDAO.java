@@ -1,6 +1,6 @@
 package com.j13.jax.dao;
 
-import com.j13.jax.vo.AlbumInfo;
+import com.j13.jax.vo.MVAlbumVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -30,7 +30,7 @@ public class MVAlbumDAO {
      * @return
      */
     public List<Integer> idList(int fromId, int size) {
-        String sql = "select id from album where id>? limit ?";
+        String sql = "select id from mv_album where id>? limit ?";
         return j.query(sql, new Object[]{}, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -41,9 +41,9 @@ public class MVAlbumDAO {
     }
 
 
-    public int addAlbum(final AlbumInfo info) {
+    public int addMVAlbum(final MVAlbumVO info) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String sql = "insert into album(source_id,remote_album_id,tag_id,title,createtime,updatetime) values " +
+        final String sql = "insert into mv_album(source_id,remote_album_id,tag_id,title,createtime,updatetime) values " +
                 "(?,?,?,?,now(),now())";
         j.update(new PreparedStatementCreator() {
             @Override
@@ -61,26 +61,26 @@ public class MVAlbumDAO {
     }
 
 
-    public boolean checkAlbumExist(int remoteAlbumId) {
-        String sql = "select count(1) from album where remote_album_id=?";
-        int i = j.queryForInt(sql, new Object[]{remoteAlbumId});
+    public boolean checkMVAlbumExist(int remoteAlbumId) {
+        String sql = "select count(1) from mv_album where remote_album_id=?";
+        int i = j.queryForObject(sql, new Object[]{remoteAlbumId}, Integer.class);
         return i == 0 ? false : true;
     }
 
-    public int getAlbumId(int remoteAlbumId) {
-        String sql = "select id from album where remote_album_id = ?";
-        return j.queryForInt(sql, new Object[]{remoteAlbumId});
+    public int getMVAlbumId(int remoteAlbumId) {
+        String sql = "select id from mv_album where remote_album_id = ?";
+        return j.queryForObject(sql, new Object[]{remoteAlbumId}, Integer.class);
     }
 
-    public AlbumInfo getAlbum(int albumId) {
-        String sql = "select a.source_id,fs.name,a.remote_album_id,a.tag_id,`at`.name,a.title from album a " +
+    public MVAlbumVO getMVAlbum(int mvAlbumId) {
+        String sql = "select a.source_id,fs.name,a.remote_album_id,a.tag_id,`at`.name,a.title from mv_album a " +
                 "left outer join fetch_source fs on fs.id=a.source_id " +
-                "left outer join album_tag `at` on `at`.id=a.tag_id " +
+                "left outer join mv_album_tag `at` on `at`.id=a.tag_id " +
                 "where a.id=?";
-        return j.queryForObject(sql, new Object[]{albumId}, new RowMapper<AlbumInfo>() {
+        return j.queryForObject(sql, new Object[]{mvAlbumId}, new RowMapper<MVAlbumVO>() {
             @Override
-            public AlbumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                AlbumInfo ai = new AlbumInfo();
+            public MVAlbumVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                MVAlbumVO ai = new MVAlbumVO();
                 ai.setSourceId(rs.getInt(1));
                 ai.setSourceName(rs.getString(2));
                 ai.setRemoteAlbumId(rs.getInt(3));
@@ -93,9 +93,9 @@ public class MVAlbumDAO {
     }
 
 
-    public String getAlbumTitle(int albumId) {
-        String sql = "select title from album where id=?";
-        return j.queryForObject(sql, new Object[]{albumId}, String.class);
+    public String getAlbumTitle(int mbAlbumId) {
+        String sql = "select title from mv_album where id=?";
+        return j.queryForObject(sql, new Object[]{mbAlbumId}, String.class);
     }
 
 

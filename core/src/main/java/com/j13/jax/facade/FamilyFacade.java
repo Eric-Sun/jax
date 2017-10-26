@@ -29,8 +29,8 @@ public class FamilyFacade {
     @Action(name = "family.add", desc = "")
     public FamilyAddResp add(CommandContext ctxt, FamilyAddReq req) {
         FamilyAddResp resp = new FamilyAddResp();
-        String headFilename = imgService.saveHeadImg(req.getHeadImg());
-        String coverFilename = imgService.saveCoverImg(req.getCoverImg());
+        String headFilename = imgService.saveImg(req.getHeadImg(), ImgService.FAMILY_HEADIMG);
+        String coverFilename = imgService.saveImg(req.getCoverImg(), ImgService.FAMILY_COVERIMG);
         int familyId = familyDAO.add(req.getName(), headFilename,
                 coverFilename, req.getBrief(), req.getCreatorUserId(), req.getCreatorUserId()
         );

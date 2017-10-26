@@ -14,10 +14,10 @@ import com.j13.jax.event.resp.EventGetResp;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
 import com.j13.jax.vo.EventVO;
-import com.j13.jax.vo.ImgVO;
+import com.j13.jax.vo.MVImgVO;
 import com.j13.jax.vo.TripleDetailContent;
 import com.j13.jax.vo.TripleImgContentVO;
-import com.j13.jax.vo.AlbumInfo;
+import com.j13.jax.vo.MVAlbumVO;
 import com.j13.jax.dao.UserDAO;
 import com.j13.jax.vo.UserVO;
 import com.j13.poppy.anno.Action;
@@ -30,7 +30,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.List;
+import java.util.Properties;
 
 @Component
 public class EventFacade {
@@ -71,8 +73,13 @@ public class EventFacade {
             // 获取下N条
             List<EventVO> list = eventDAO.MEINVIdList(fromCursorId, 2);
             for (EventVO eventVO : list) {
-                int albumId = new Integer(eventVO.getContent());
-                AlbumInfo ai = MVAlbumDAO.getAlbum(albumId);
+                int eventUserId = eventVO.getUserId();
+
+                UserVO userVO = userDAO.getUserInfo(eventUserId);
+                String userHeadFileName = userVO.getImg();
+                String userHeadUrl = PropertiesConfiguration.getInstance().getStringValue(PropertiesKey.THUMB_SERVER) + File.separator + userHeadFileName;
+                int mvAlbumId = new Integer(eventVO.getContent());
+                MVAlbumVO ai = MVAlbumDAO.getMVAlbum(mvAlbumId);
                 int remoteAlbumId = ai.getRemoteAlbumId();
                 EventSimpleGetResp getResp = new EventSimpleGetResp();
 
@@ -87,7 +94,9 @@ public class EventFacade {
 
                 getResp.setContent(vo);
                 getResp.setType(Constants.EventType.MEINV);
+                getResp.setUserHeadUrl(userHeadUrl);
                 getResp.setTitle(ai.getTitle());
+                getResp.setId(eventVO.getId());
                 resp.getList().add(getResp);
                 toCursorId = eventVO.getId();
             }
@@ -133,18 +142,18 @@ public class EventFacade {
 
             vo.setUserName(userVO.getNickName());
             vo.setUserImgUrl(getUserImgUrl(userVO.getImg()));
-            int albumId = new Integer(vo.getContent());
-            List<ImgVO> imgList = MVImgDAO.list(albumId);
-            String title = MVAlbumDAO.getAlbumTitle(albumId);
+            int mvAlbumId = new Integer(vo.getContent());
+            List<MVImgVO> imgList = MVImgDAO.list(mvAlbumId);
+            MVAlbumVO mvAlbumVO = MVAlbumDAO.getMVAlbum(mvAlbumId);
             TripleDetailContent c = new TripleDetailContent();
-            for (ImgVO imgVO : imgList) {
-                String url = getImgUrl(albumId, imgVO.getRemoteImgId());
+            for (MVImgVO MVImgVO : imgList) {
+                String url = getImgUrl(mvAlbumVO.getRemoteAlbumId(), MVImgVO.getRemoteImgId());
                 c.getImgList().add(url);
             }
 
             BeanUtils.copyProperties(resp, vo);
-            resp.setContent(JSON.toJSONString(c));
-            resp.setTitle(title);
+            resp.setContent(c.getImgList());
+            resp.setTitle(mvAlbumVO.getTitle());
         }
 
         return resp;

@@ -50,13 +50,14 @@ public class EventDAO {
     }
 
     public List<EventVO> MEINVIdList(int fromCursorId, int i) {
-        String sql = "select id,content from event where family_id=-1 and id>? order by id limit ?;";
+        String sql = "select id,content,user_id from event where family_id=-1 and id>? order by id limit ?;";
         return j.query(sql, new Object[]{fromCursorId, i}, new RowMapper<EventVO>() {
             @Override
             public EventVO mapRow(ResultSet rs, int rowNum) throws SQLException {
                 EventVO vo = new EventVO();
                 vo.setContent(rs.getString(2));
                 vo.setId(rs.getInt(1));
+                vo.setUserId(rs.getInt(3));
                 return vo;
             }
         });

@@ -20,10 +20,10 @@ import java.util.Random;
 public class ImgService {
 
     private static Logger LOG = LoggerFactory.getLogger(ImgService.class);
-    private static int EVENT_IMG = 0;
-    private static int FAMILY_HEADIMG = 1;
-    private static int FAMILY_COVERIMG = 2;
-    private static int USER_HAED = 3;
+    public static int EVENT_IMG = 0;
+    public static int FAMILY_HEADIMG = 1;
+    public static int FAMILY_COVERIMG = 2;
+    public static int USER_HAED = 3;
 
     Random ran = new Random();
 

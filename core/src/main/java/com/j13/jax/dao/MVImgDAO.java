@@ -1,7 +1,6 @@
 package com.j13.jax.dao;
 
-import com.j13.jax.vo.ImgVO;
-import com.j13.jax.vo.RemoteImgInfo;
+import com.j13.jax.vo.MVImgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -24,15 +23,15 @@ public class MVImgDAO {
     JdbcTemplate j;
 
 
-    public int add(final RemoteImgInfo rii) {
+    public int add(final MVImgVO rii) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String sql = "insert into img (album_id,remote_img_url,remote_img_id,relation_local_path,createtime,updatetime) " +
+        final String sql = "insert into mv_img (mv_album_id,remote_img_url,remote_img_id,relation_local_path,createtime,updatetime) " +
                 "values (?,?,?,?,now(),now())";
         j.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-                pstmt.setInt(1, rii.getAlbumId());
+                pstmt.setInt(1, rii.getMvAlbumId());
                 pstmt.setString(2, rii.getRemoteImgUrl());
                 pstmt.setInt(3, rii.getRemoteImgId());
                 pstmt.setString(4, rii.getRelationLocalPath());
@@ -43,20 +42,20 @@ public class MVImgDAO {
     }
 
     public boolean checkImgExist(String remoteImgUrl) {
-        String sql = "select count(1) from img where remote_img_url=?";
+        String sql = "select count(1) from mv_img where remote_img_url=?";
         int count = j.queryForObject(sql, new Object[]{remoteImgUrl}, Integer.class);
 
         return count == 0 ? false : true;
     }
 
-    public List<ImgVO> list(int albumId) {
-        String sql = "select id,album_id,remote_img_id from img where album_id=?";
-        return j.query(sql, new Object[]{albumId}, new RowMapper<ImgVO>() {
+    public List<MVImgVO> list(int mvAlbumId) {
+        String sql = "select id,mv_album_id,remote_img_id from mv_img where mv_album_id=?";
+        return j.query(sql, new Object[]{mvAlbumId}, new RowMapper<MVImgVO>() {
             @Override
-            public ImgVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ImgVO vo = new ImgVO();
+            public MVImgVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                MVImgVO vo = new MVImgVO();
                 vo.setId(rs.getInt(1));
-                vo.setAlbumId(rs.getInt(2));
+                vo.setMvAlbumId(rs.getInt(2));
                 vo.setRemoteImgId(rs.getInt(3));
                 return vo;
             }

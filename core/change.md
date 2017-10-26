@@ -5,3 +5,5 @@ img表改名为mv_img
 album表改名为mv_album
 album_tag表改名为mv_album_tag
 
+mv_img表中的album_id改为mv_album_id
+增加img表
