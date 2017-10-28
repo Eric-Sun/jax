@@ -7,6 +7,7 @@ import com.j13.jax.family.req.FamilyGetReq;
 import com.j13.jax.family.resp.FamilyAddResp;
 import com.j13.jax.family.resp.FamilyGetResp;
 import com.j13.jax.service.ImgService;
+import com.j13.jax.vo.FamilyVO;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.core.CommandContext;
 import com.j13.poppy.core.CommonResultResp;
@@ -55,6 +56,8 @@ public class FamilyFacade {
     public FamilyGetResp get(CommandContext ctxt, FamilyGetReq req) {
         int uid = ctxt.getUid();
         int familyId = req.getFamilyId();
+
+//        FamilyVO familyVO = familyDAO.get(familyId);
 
         return null;
 

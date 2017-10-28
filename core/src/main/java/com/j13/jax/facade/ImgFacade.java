@@ -21,7 +21,7 @@ public class ImgFacade {
     @Autowired
     ImgDAO imgDAO;
 
-    @Action(name = "img.upload", desc = "图片上传")
+    @Action(name = "img.upload", desc = "图片上传，并且回传图片的id")
     public ImgUploadResp upload(CommandContext ctxt, ImgUploadReq req) {
         int type = req.getType();
         String fileName = imgService.saveImg(req.getFile(), type);

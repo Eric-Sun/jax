@@ -75,4 +75,8 @@ public class ImgService {
     }
 
 
+    public String getUserHeadUrl(String imgUrl) {
+        return PropertiesConfiguration.getInstance().getStringValue("img.server") + "/" + imgUrl;
+    }
+
 }

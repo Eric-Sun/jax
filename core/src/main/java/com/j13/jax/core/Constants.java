@@ -53,4 +53,9 @@ public class Constants {
         public static int MEINV = -1;
         public static int DZ = -2;
     }
+
+    public static class UserAction {
+        public static int PRAISE = 0;
+        public static int SHARE = 1;
+    }
 }

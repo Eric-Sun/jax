@@ -13,6 +13,7 @@ import com.j13.jax.event.req.EventListReq;
 import com.j13.jax.event.resp.EventGetResp;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
+import com.j13.jax.service.ImgService;
 import com.j13.jax.vo.EventVO;
 import com.j13.jax.vo.MVImgVO;
 import com.j13.jax.vo.TripleDetailContent;
@@ -48,6 +49,8 @@ public class EventFacade {
     UserDAO userDAO;
     @Autowired
     MVImgDAO MVImgDAO;
+    @Autowired
+    ImgService imgService;
 
 
     @Action(name = "event.list", desc = "event list in family.")
@@ -128,9 +131,7 @@ public class EventFacade {
         return CommonResultResp.success();
     }
 
-    private String getUserImgUrl(String imgUrl) {
-        return PropertiesConfiguration.getInstance().getStringValue("img.server") + "/" + imgUrl;
-    }
+
 
     @Action(name = "event.get", desc = "")
     public EventGetResp get(CommandContext ctxt, EventGetReq req) {
@@ -141,7 +142,7 @@ public class EventFacade {
             UserVO userVO = userDAO.getUserNameAndImg(vo.getUserId());
 
             vo.setUserName(userVO.getNickName());
-            vo.setUserImgUrl(getUserImgUrl(userVO.getImg()));
+            vo.setUserImgUrl(imgService.getUserHeadUrl(userVO.getImg()));
             int mvAlbumId = new Integer(vo.getContent());
             List<MVImgVO> imgList = MVImgDAO.list(mvAlbumId);
             MVAlbumVO mvAlbumVO = MVAlbumDAO.getMVAlbum(mvAlbumId);
@@ -150,12 +151,10 @@ public class EventFacade {
                 String url = getImgUrl(mvAlbumVO.getRemoteAlbumId(), MVImgVO.getRemoteImgId());
                 c.getImgList().add(url);
             }
-
             BeanUtils.copyProperties(resp, vo);
             resp.setContent(c.getImgList());
             resp.setTitle(mvAlbumVO.getTitle());
         }
-
         return resp;
     }
 }

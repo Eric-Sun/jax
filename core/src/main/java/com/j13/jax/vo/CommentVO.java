@@ -11,7 +11,7 @@ public class CommentVO {
     private int isTop;
     private int priase;
     private int share;
-    private int replyCId;
+    private int replyCId=0;
     private Date createtime;
 
     public String getContent() {
