@@ -92,6 +92,16 @@ public class FamilyDAO {
                 return vo;
             }
         });
+    }
 
+
+    public long changeMemberCount(int familyId, int count) {
+        String sql = "update family set members=members+? where id=? and deleted=?";
+        return j.update(sql, new Object[]{count, familyId, Constants.DB.NOT_DELETED});
+    }
+
+    public long changeTopicCount(int familyId, int count) {
+        String sql = "update family set topics=topics+? where id=? and deleted=?";
+        return j.update(sql, new Object[]{count, familyId, Constants.DB.NOT_DELETED});
     }
 }

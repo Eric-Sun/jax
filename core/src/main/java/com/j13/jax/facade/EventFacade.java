@@ -45,6 +45,8 @@ public class EventFacade {
     CollectionDAO collectionDAO;
     @Autowired
     EventHelper eventHelper;
+    @Autowired
+    FamilyDAO familyDAO;
 
     @Action(name = "event.list", desc = "event list in family.")
     public EventListResp list(CommandContext ctxt, EventListReq req) {
@@ -105,6 +107,8 @@ public class EventFacade {
 
         int eventId = eventDAO.add(eventVO);
         LOG.info("event add successfully. id={}", eventId);
+        familyDAO.changeTopicCount(req.getFamilyId(), 1);
+
         return CommonResultResp.success();
     }
 

@@ -1,6 +1,7 @@
 package com.j13.jax.facade;
 
 import com.j13.jax.core.ErrorCode;
+import com.j13.jax.dao.FamilyDAO;
 import com.j13.jax.dao.FamilyMemberDAO;
 import com.j13.jax.familyMember.req.FamilyMemberAddReq;
 import com.j13.jax.familyMember.req.FamilyMemberQuitReq;
@@ -19,6 +20,8 @@ public class FamilyMemberFacade {
 
     @Autowired
     FamilyMemberDAO familyMemberDAO;
+    @Autowired
+    FamilyDAO familyDAO;
 
 
     @Action(name = "familyMember.add", desc = "")
@@ -30,6 +33,8 @@ public class FamilyMemberFacade {
             familyMemberDAO.add(ctxt.getUid(), req.getFamilyId());
             LOG.info("reAdd family member. uid={},familyId={}", ctxt.getUid(), req.getFamilyId());
         }
+
+        familyDAO.changeMemberCount(req.getFamilyId(), 1);
         return CommonResultResp.success();
     }
 
@@ -37,6 +42,7 @@ public class FamilyMemberFacade {
     public CommonResultResp quit(CommandContext ctxt, FamilyMemberQuitReq req) {
         familyMemberDAO.delete(ctxt.getUid(), req.getFamilyMemberId());
         LOG.info("delete family member. uid={},familyMemberId={}", ctxt.getUid(), req.getFamilyMemberId());
+        familyDAO.changeMemberCount(req.getFamilyId(), -1);
         return CommonResultResp.success();
     }
 
