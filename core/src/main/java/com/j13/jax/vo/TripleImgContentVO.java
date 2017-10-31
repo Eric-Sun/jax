@@ -5,6 +5,15 @@ public class TripleImgContentVO {
     private String img1Url;
     private String img2Url;
     private String img3Url;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getImg1Url() {
         return img1Url;

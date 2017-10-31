@@ -5,7 +5,7 @@ import com.j13.poppy.anno.Parameter;
 
 import java.util.List;
 
-public class FamilySearchByOwnerResp {
+public class FamilyCreatedListResp {
     @Parameter(desc="家族列表")
     private List<FamilyGetResp> list = Lists.newLinkedList();
 

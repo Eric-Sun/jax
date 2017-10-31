@@ -13,6 +13,10 @@ public class FamilyGetResp {
     private String coverImgUrl;
     @Parameter(desc="家族简介")
     private String brief;
+    @Parameter(desc="")
+    private int memberCount;
+    @Parameter(desc="")
+    private int topicCount;
 
     public String getBrief() {
         return brief;

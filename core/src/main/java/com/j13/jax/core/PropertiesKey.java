@@ -1,8 +1,6 @@
 package com.j13.jax.core;
 
 public class PropertiesKey {
-    public static String IMG_SERVER = "img.server";
-    public static String THUMB_SERVER = "thumb.server";
     public static String FAMILY_HEADIMG_PATH = "family.headImg.path";
     public static String FAMILY_COVERIMG_PATH = "family.coverImg.path";
     public static String USER_HEAD_PATH = "user.head.path";

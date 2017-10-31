@@ -9,3 +9,8 @@ mv_img表中的album_id改为mv_album_id
 增加img表
 
 # 2
+comment share/praise 初始值设置为0
+event 增加share/praise字段
+增加collection表
+family表中 改head_img_id,cover_img_id
+增加family_member表

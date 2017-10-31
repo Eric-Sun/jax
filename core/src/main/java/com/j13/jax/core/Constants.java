@@ -58,4 +58,9 @@ public class Constants {
         public static int PRAISE = 0;
         public static int SHARE = 1;
     }
+
+    public static class CollectionType {
+        public static int EVENT = 0;
+        public static int COMMENT = 1;
+    }
 }

@@ -6,19 +6,53 @@ public class FamilyVO {
     private int id;
     private String name;
     private String brief;
-    private String headImg;
-    private String coverImg;
+    private int headImgId;
+    private int coverImgId;
+    private String headImgUrl;
+    private String coverImgUrl;
     private int creatorUserId;
     private int ownerUserId;
     private int memberCount;
     private int topicCount;
-    private Date createtime;
+    private long createtime;
 
-    public Date getCreatetime() {
+    public int getCoverImgId() {
+        return coverImgId;
+    }
+
+    public void setCoverImgId(int coverImgId) {
+        this.coverImgId = coverImgId;
+    }
+
+    public String getCoverImgUrl() {
+        return coverImgUrl;
+    }
+
+    public void setCoverImgUrl(String coverImgUrl) {
+        this.coverImgUrl = coverImgUrl;
+    }
+
+    public int getHeadImgId() {
+        return headImgId;
+    }
+
+    public void setHeadImgId(int headImgId) {
+        this.headImgId = headImgId;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
+    public long getCreatetime() {
         return createtime;
     }
 
-    public void setCreatetime(Date createtime) {
+    public void setCreatetime(long createtime) {
         this.createtime = createtime;
     }
 
@@ -30,13 +64,7 @@ public class FamilyVO {
         this.brief = brief;
     }
 
-    public String getCoverImg() {
-        return coverImg;
-    }
 
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
-    }
 
     public int getCreatorUserId() {
         return creatorUserId;
@@ -46,13 +74,6 @@ public class FamilyVO {
         this.creatorUserId = creatorUserId;
     }
 
-    public String getHeadImg() {
-        return headImg;
-    }
-
-    public void setHeadImg(String headImg) {
-        this.headImg = headImg;
-    }
 
     public int getId() {
         return id;

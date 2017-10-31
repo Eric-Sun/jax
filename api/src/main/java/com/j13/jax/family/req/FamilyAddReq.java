@@ -7,13 +7,12 @@ public class FamilyAddReq {
     @Parameter(desc="家族名称")
     private String name;
     @Parameter(desc="头像")
-    private FileItem headImg;
+    private String headImgId;
     @Parameter(desc="背景图片")
-    private FileItem coverImg;
+    private String coverImgId;
     @Parameter(desc="简介")
     private String brief;
-    @Parameter(desc="创建者uid")
-    private int creatorUserId;
+
 
     public String getBrief() {
         return brief;
@@ -23,28 +22,20 @@ public class FamilyAddReq {
         this.brief = brief;
     }
 
-    public FileItem getCoverImg() {
-        return coverImg;
+    public String getCoverImgId() {
+        return coverImgId;
     }
 
-    public void setCoverImg(FileItem coverImg) {
-        this.coverImg = coverImg;
+    public void setCoverImgId(String coverImgId) {
+        this.coverImgId = coverImgId;
     }
 
-    public int getCreatorUserId() {
-        return creatorUserId;
+    public String getHeadImgId() {
+        return headImgId;
     }
 
-    public void setCreatorUserId(int creatorUserId) {
-        this.creatorUserId = creatorUserId;
-    }
-
-    public FileItem getHeadImg() {
-        return headImg;
-    }
-
-    public void setHeadImg(FileItem headImg) {
-        this.headImg = headImg;
+    public void setHeadImgId(String headImgId) {
+        this.headImgId = headImgId;
     }
 
     public String getName() {

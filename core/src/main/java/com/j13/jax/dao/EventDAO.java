@@ -79,4 +79,14 @@ public class EventDAO {
             }
         });
     }
+
+    public void praise(int eventId) {
+        String sql = "update event set praise=praise+1 where id=? and deleted=?";
+        j.update(sql, new Object[]{eventId, Constants.DB.NOT_DELETED});
+    }
+
+    public void share(int eventId) {
+        String sql = "update event set share=share+1 where id=? and deleted=?";
+        j.update(sql, new Object[]{eventId, Constants.DB.NOT_DELETED});
+    }
 }

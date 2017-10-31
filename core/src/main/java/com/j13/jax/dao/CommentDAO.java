@@ -25,7 +25,7 @@ public class CommentDAO {
     public int add(final int eventId, final int userId, final String content, final int replyCId) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String sql = "insert into comment " +
-                "(event_id,user_id,content,replay_cid,createtime) values " +
+                "(event_id,user_id,content,reply_cid,createtime) values " +
                 "(?,?,?,?,now())";
         j.update(new PreparedStatementCreator() {
             @Override
@@ -43,7 +43,7 @@ public class CommentDAO {
 
 
     public int delete(int userId, int cid) {
-        String sql = "update comment set deleted=? where cid=? and user_id=?";
+        String sql = "update comment set deleted=? where id=? and user_id=?";
         return j.update(sql, new Object[]{Constants.DB.DELETED, cid, userId});
     }
 

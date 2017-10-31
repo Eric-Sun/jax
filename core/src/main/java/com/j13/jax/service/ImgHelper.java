@@ -17,9 +17,9 @@ import java.util.Random;
  * 图片存储的app
  */
 @Service
-public class ImgService {
+public class ImgHelper {
 
-    private static Logger LOG = LoggerFactory.getLogger(ImgService.class);
+    private static Logger LOG = LoggerFactory.getLogger(ImgHelper.class);
     public static int EVENT_IMG = 0;
     public static int FAMILY_HEADIMG = 1;
     public static int FAMILY_COVERIMG = 2;
@@ -77,6 +77,21 @@ public class ImgService {
 
     public String getUserHeadUrl(String imgUrl) {
         return PropertiesConfiguration.getInstance().getStringValue("img.server") + "/" + imgUrl;
+    }
+
+    public String getFamilyHeadUrl(String imgUrl) {
+        return PropertiesConfiguration.getInstance().getStringValue("family.headImg.path") + "/" + imgUrl;
+    }
+
+    public String getFamilyCoverUrl(String imgUrl) {
+        return PropertiesConfiguration.getInstance().getStringValue("family.coverImg.path") + "/" + imgUrl;
+    }
+
+
+
+    public String getEventImgUrl(int albumId, int imgId) {
+        String server = PropertiesConfiguration.getInstance().getStringValue(PropertiesKey.EVENT_IMG_PATH);
+        return new StringBuilder().append(server).append("/").append(albumId).append("/").append(imgId).append(".jpg").toString();
     }
 
 }

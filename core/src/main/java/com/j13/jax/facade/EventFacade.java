@@ -1,30 +1,21 @@
 package com.j13.jax.facade;
 
-import com.alibaba.fastjson.JSON;
 import com.j13.jax.core.Constants;
+import com.j13.jax.core.ErrorCode;
 import com.j13.jax.core.PropertiesKey;
-import com.j13.jax.dao.MVAlbumDAO;
-import com.j13.jax.dao.EventDAO;
-import com.j13.jax.dao.MVImgDAO;
-import com.j13.jax.dao.SystemFamilyCursorDAO;
-import com.j13.jax.event.req.EventAddReq;
-import com.j13.jax.event.req.EventGetReq;
-import com.j13.jax.event.req.EventListReq;
+import com.j13.jax.dao.*;
+import com.j13.jax.event.req.*;
 import com.j13.jax.event.resp.EventGetResp;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
-import com.j13.jax.service.ImgService;
-import com.j13.jax.vo.EventVO;
-import com.j13.jax.vo.MVImgVO;
-import com.j13.jax.vo.TripleDetailContent;
-import com.j13.jax.vo.TripleImgContentVO;
-import com.j13.jax.vo.MVAlbumVO;
-import com.j13.jax.dao.UserDAO;
-import com.j13.jax.vo.UserVO;
+import com.j13.jax.service.EventHelper;
+import com.j13.jax.service.ImgHelper;
+import com.j13.jax.vo.*;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.config.PropertiesConfiguration;
 import com.j13.poppy.core.CommandContext;
 import com.j13.poppy.core.CommonResultResp;
+import com.j13.poppy.exceptions.CommonException;
 import com.j13.poppy.util.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +24,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
-import java.util.Properties;
 
 @Component
 public class EventFacade {
@@ -50,8 +40,11 @@ public class EventFacade {
     @Autowired
     MVImgDAO MVImgDAO;
     @Autowired
-    ImgService imgService;
-
+    ImgHelper imgHelper;
+    @Autowired
+    CollectionDAO collectionDAO;
+    @Autowired
+    EventHelper eventHelper;
 
     @Action(name = "event.list", desc = "event list in family.")
     public EventListResp list(CommandContext ctxt, EventListReq req) {
@@ -80,25 +73,14 @@ public class EventFacade {
 
                 UserVO userVO = userDAO.getUserInfo(eventUserId);
                 String userHeadFileName = userVO.getImg();
-                String userHeadUrl = PropertiesConfiguration.getInstance().getStringValue(PropertiesKey.THUMB_SERVER) + File.separator + userHeadFileName;
-                int mvAlbumId = new Integer(eventVO.getContent());
-                MVAlbumVO ai = MVAlbumDAO.getMVAlbum(mvAlbumId);
-                int remoteAlbumId = ai.getRemoteAlbumId();
+                String userHeadUrl = PropertiesConfiguration.getInstance().getStringValue(PropertiesKey.USER_HEAD_PATH) + File.separator + userHeadFileName;
                 EventSimpleGetResp getResp = new EventSimpleGetResp();
 
-                String img1 = getImgUrl(remoteAlbumId, 1);
-                String img2 = getImgUrl(remoteAlbumId, 2);
-                String img3 = getImgUrl(remoteAlbumId, 3);
-
-                TripleImgContentVO vo = new TripleImgContentVO();
-                vo.setImg1Url(img1);
-                vo.setImg2Url(img2);
-                vo.setImg3Url(img3);
-
+                TripleImgContentVO vo = eventHelper.getMVTriplerImgContent(eventVO);
                 getResp.setContent(vo);
                 getResp.setType(Constants.EventType.MEINV);
                 getResp.setUserHeadUrl(userHeadUrl);
-                getResp.setTitle(ai.getTitle());
+                getResp.setTitle(vo.getTitle());
                 getResp.setId(eventVO.getId());
                 resp.getList().add(getResp);
                 toCursorId = eventVO.getId();
@@ -108,11 +90,6 @@ public class EventFacade {
             systemFamilyCursorDAO.update(userId, familyId, toCursorId);
         }
         return resp;
-    }
-
-    private String getImgUrl(int albumId, int imgId) {
-        String server = PropertiesConfiguration.getInstance().getStringValue(PropertiesKey.IMG_SERVER);
-        return new StringBuilder().append(server).append("/").append(albumId).append("/").append(imgId).append(".jpg").toString();
     }
 
 
@@ -132,7 +109,6 @@ public class EventFacade {
     }
 
 
-
     @Action(name = "event.get", desc = "")
     public EventGetResp get(CommandContext ctxt, EventGetReq req) {
         EventGetResp resp = new EventGetResp();
@@ -142,13 +118,13 @@ public class EventFacade {
             UserVO userVO = userDAO.getUserNameAndImg(vo.getUserId());
 
             vo.setUserName(userVO.getNickName());
-            vo.setUserImgUrl(imgService.getUserHeadUrl(userVO.getImg()));
+            vo.setUserImgUrl(imgHelper.getUserHeadUrl(userVO.getImg()));
             int mvAlbumId = new Integer(vo.getContent());
             List<MVImgVO> imgList = MVImgDAO.list(mvAlbumId);
             MVAlbumVO mvAlbumVO = MVAlbumDAO.getMVAlbum(mvAlbumId);
             TripleDetailContent c = new TripleDetailContent();
             for (MVImgVO MVImgVO : imgList) {
-                String url = getImgUrl(mvAlbumVO.getRemoteAlbumId(), MVImgVO.getRemoteImgId());
+                String url = imgHelper.getEventImgUrl(mvAlbumVO.getRemoteAlbumId(), MVImgVO.getRemoteImgId());
                 c.getImgList().add(url);
             }
             BeanUtils.copyProperties(resp, vo);
@@ -156,5 +132,32 @@ public class EventFacade {
             resp.setTitle(mvAlbumVO.getTitle());
         }
         return resp;
+    }
+
+
+    @Action(name = "event.userAction", desc = "")
+    public CommonResultResp userAction(CommandContext ctxt, EventUserActionReq req) {
+        if (req.getUserActionType() == Constants.UserAction.PRAISE) {
+            eventDAO.praise(req.getEventId());
+            LOG.info("event praise. userId={},eventId={}", ctxt.getUid(), req.getEventId());
+        } else {
+            eventDAO.share(req.getEventId());
+            LOG.info("event share. userId={},eventId={}", ctxt.getUid(), req.getEventId());
+        }
+        return CommonResultResp.success();
+    }
+
+
+    @Action(name = "event.collect", desc = "")
+    public CommonResultResp collect(CommandContext ctxt, EventCollectReq req) {
+        int eventId = req.getEventId();
+        if (collectionDAO.checkExists(ctxt.getUid(), req.getEventId(), Constants.CollectionType.EVENT)) {
+            //error
+            throw new CommonException(ErrorCode.Event.EVENT_COLLECTION_EXIST);
+        }
+
+        collectionDAO.add(ctxt.getUid(), Constants.CollectionType.EVENT, eventId);
+        LOG.info("add collection . type=event, eventId={},userId", eventId, ctxt.getUid());
+        return CommonResultResp.success();
     }
 }
