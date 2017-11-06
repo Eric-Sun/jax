@@ -21,6 +21,7 @@ public class MVImgDAO {
 
     @Autowired
     JdbcTemplate j;
+    private int leastMEINVId;
 
 
     public int add(final MVImgVO rii) {
@@ -60,5 +61,10 @@ public class MVImgDAO {
                 return vo;
             }
         });
+    }
+
+    public int getLeastMEINVId() {
+        String sql = "select id from mv_album order by id limit 1;";
+        return j.queryForObject(sql, new Object[]{}, Integer.class);
     }
 }

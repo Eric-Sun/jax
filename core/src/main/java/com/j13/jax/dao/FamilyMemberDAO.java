@@ -19,9 +19,9 @@ public class FamilyMemberDAO {
     @Autowired
     JdbcTemplate j;
 
-    public int add(int userId, int familyId) {
+    public int add(final  int userId, final int familyId) {
         KeyHolder holder = new GeneratedKeyHolder();
-        String sql = "insert into family_member " +
+        final  String sql = "insert into family_member " +
                 "(user_id,family_id,createtime) " +
                 "values " +
                 "(?,?,now())";

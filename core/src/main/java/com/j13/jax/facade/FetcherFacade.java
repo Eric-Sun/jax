@@ -1,15 +1,11 @@
 package com.j13.jax.facade;
 
-import com.j13.jax.dao.MVAlbumDAO;
-import com.j13.jax.dao.MVImgDAO;
-import com.j13.jax.event.req.EventGetAlbumReq;
-import com.j13.jax.event.resp.EventGetAlbumResp;
+import com.j13.jax.dao.*;
+import com.j13.jax.fetcher.req.FetcherGetAlbumReq;
+import com.j13.jax.fetcher.resp.FetcherGetAlbumResp;
+import com.j13.jax.fetcher.resp.*;
 import com.j13.jax.service.FetcherSourceService;
-import com.j13.jax.dao.FetchIndexDAO;
 import com.j13.jax.fetcher.req.*;
-import com.j13.jax.fetcher.resp.FetcherMVAlbumAddResp;
-import com.j13.jax.fetcher.resp.FetcherGetMVAlbumIdResp;
-import com.j13.jax.fetcher.resp.FetcherGetLastIndexResp;
 import com.j13.jax.vo.MVAlbumVO;
 import com.j13.jax.vo.MVImgVO;
 import com.j13.poppy.anno.Action;
@@ -34,6 +30,10 @@ public class FetcherFacade {
     MVImgDAO MVImgDAO;
     @Autowired
     FetchIndexDAO fetchIndexDAO;
+    @Autowired
+    DZDAO dzdao;
+    @Autowired
+    DZCommentDAO dzCommentDAO;
 
     @Action(name = "fetcher.mvAlbumAdd", desc = "创建一个mv_album")
     public FetcherMVAlbumAddResp mvAlbumAdd(CommandContext ctxt, FetcherMVAlbumAddReq req) {
@@ -42,6 +42,7 @@ public class FetcherFacade {
         int remoteAlbumId = req.getRemoteAlbumId();
         String title = req.getTitle();
         int tagId = req.getTagId();
+        int userId = req.getUserId();
         fetcherSourceService.check(sourceId);
 
         MVAlbumVO ai = new MVAlbumVO();
@@ -49,9 +50,10 @@ public class FetcherFacade {
         ai.setSourceId(sourceId);
         ai.setTitle(title);
         ai.setTagId(tagId);
+        ai.setUserId(userId);
 
         int id = MVAlbumDAO.addMVAlbum(ai);
-        LOG.info("add mv_album success. id={}", id);
+        LOG.info("mv_album added. id={}", id);
         resp.setMvAlbumId(id);
         return resp;
     }
@@ -78,15 +80,17 @@ public class FetcherFacade {
     }
 
     @Action(name = "fetcher.mvImgAdd", desc = "添加mv_img")
-    public CommonResultResp mvImgAdd(CommandContext ctxt, FetcherMVImgAddReq req) {
+    public FetcherMVImgAddResp mvImgAdd(CommandContext ctxt, FetcherMVImgAddReq req) {
         MVImgVO rii = new MVImgVO();
         rii.setMvAlbumId(req.getMvAlbumId());
         rii.setRelationLocalPath(req.getRelationLocalPath());
         rii.setRemoteImgId(req.getRemoteImgId());
         rii.setRemoteImgUrl(req.getRemoteUrl());
         int id = MVImgDAO.add(rii);
-        LOG.info("mv_img add success. id={}", id);
-        return CommonResultResp.success();
+        LOG.info("mvImg added. id={}", id);
+        FetcherMVImgAddResp resp = new FetcherMVImgAddResp();
+        resp.setMvImgId(id);
+        return resp;
     }
 
     @Action(name = "fetcher.checkMVImgExist", desc = "查看mv_img是否存在")
@@ -100,7 +104,8 @@ public class FetcherFacade {
     }
 
 
-    @Action(name = "fetcher.updateLastIndex", desc = "更新fetch源的最后一个位置")
+    @Action(name = "fetcher.updateLastIndex", desc = "更新fetch源的最后一个位置，已经在171103废弃")
+    @Deprecated
     public CommonResultResp updateLastIndex(CommandContext ctxt, FetcherUpdateLastIndexReq req) {
         int sourceId = req.getSourceId();
         int lastIndex = req.getLastIndex();
@@ -109,7 +114,8 @@ public class FetcherFacade {
         return CommonResultResp.success();
     }
 
-    @Action(name = "fetcher.getLastIndex", desc = "获取上次的最后一次的索引位置")
+    @Deprecated
+    @Action(name = "fetcher.getLastIndex", desc = "获取上次的最后一次的索引位置，已经在171103废弃")
     public FetcherGetLastIndexResp getLastIndex(CommandContext ctxt, FetcherGetLastIndexReq req) {
         int sourceId = req.getSourceId();
         FetcherGetLastIndexResp resp = new FetcherGetLastIndexResp();
@@ -125,12 +131,44 @@ public class FetcherFacade {
 
 
     @Action(name = "fetcher.getMVAlbum", desc = "")
-    public EventGetAlbumResp getMVAlbum(CommandContext ctxt, EventGetAlbumReq req) {
+    public FetcherGetAlbumResp getMVAlbum(CommandContext ctxt, FetcherGetAlbumReq req) {
         int albumId = req.getMvAlbumId();
-        EventGetAlbumResp resp = new EventGetAlbumResp();
+        FetcherGetAlbumResp resp = new FetcherGetAlbumResp();
         MVAlbumVO ai = MVAlbumDAO.getMVAlbum(albumId);
-
         BeanUtils.copyProperties(resp, ai);
         return resp;
     }
+
+
+    @Action(name = "fetcher.dzAdd", desc = "")
+    public FetcherDZAddResp dzAdd(CommandContext ctxt, FetcherDZAddReq req) {
+        int userId = req.getUserId();
+        int sourceId = req.getSourceId();
+        String content = req.getContent();
+        int sourceDZId = req.getSourceDZId();
+
+        int dzId = dzdao.add(userId, sourceId, sourceDZId, content);
+        LOG.info("dz added. id={}", dzId);
+
+        FetcherDZAddResp resp = new FetcherDZAddResp();
+        resp.setDzId(dzId);
+        return resp;
+    }
+
+
+    @Action(name = "fetcher.addComment", desc = "")
+    public FetcherAddCommentResp addComment(CommandContext ctxt, FetcherAddCommentReq req) {
+        FetcherAddCommentResp resp = new FetcherAddCommentResp();
+        int userId = req.getUserId();
+        int dzId = req.getDzId();
+        String content = req.getContent();
+
+        int dzCommentId = dzCommentDAO.add(userId, dzId, content);
+        LOG.info("comment added. id={}", dzCommentId);
+        resp.setDzCommentId(dzCommentId);
+
+        return resp;
+    }
+
+
 }

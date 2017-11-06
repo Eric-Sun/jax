@@ -22,9 +22,9 @@ public class CollectionDAO {
     @Autowired
     JdbcTemplate j;
 
-    public int add(int userId, int type, int resourceId) {
+    public int add(final int userId, final int type, final int resourceId) {
         KeyHolder holder = new GeneratedKeyHolder();
-        String sql = "insert into collection " +
+        final String sql = "insert into collection " +
                 "(user_id,type,resource_id,createtime) " +
                 "values" +
                 "(?,?,?,now())";

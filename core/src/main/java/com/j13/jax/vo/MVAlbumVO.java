@@ -17,6 +17,60 @@ public class MVAlbumVO {
     private String sourceName;
     private String tagName;
     private String title;
+    private int userId;
+    private int id;
+    private int praise;
+    private int share;
+    private String userName;
+    private String userImgUrl;
+
+    public String getUserImgUrl() {
+        return userImgUrl;
+    }
+
+    public void setUserImgUrl(String userImgUrl) {
+        this.userImgUrl = userImgUrl;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getPraise() {
+        return praise;
+    }
+
+    public void setPraise(int praise) {
+        this.praise = praise;
+    }
+
+    public int getShare() {
+        return share;
+    }
+
+    public void setShare(int share) {
+        this.share = share;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getSourceName() {
         return sourceName;

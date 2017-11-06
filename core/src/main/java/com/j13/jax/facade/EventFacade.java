@@ -8,7 +8,7 @@ import com.j13.jax.event.req.*;
 import com.j13.jax.event.resp.EventGetResp;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
-import com.j13.jax.service.EventHelper;
+import com.j13.jax.service.MVHelper;
 import com.j13.jax.service.ImgHelper;
 import com.j13.jax.vo.*;
 import com.j13.poppy.anno.Action;
@@ -44,55 +44,11 @@ public class EventFacade {
     @Autowired
     CollectionDAO collectionDAO;
     @Autowired
-    EventHelper eventHelper;
+    MVHelper mvHelper;
     @Autowired
     FamilyDAO familyDAO;
 
-    @Action(name = "event.list", desc = "event list in family.")
-    public EventListResp list(CommandContext ctxt, EventListReq req) {
-        EventListResp resp = new EventListResp();
-        int userId = ctxt.getUid();
 
-        // 如果是系统默认的家族，需要查询cursor
-        int familyId = req.getFamilyId();
-        if (familyId == Constants.EventType.MEINV) {
-            //美女
-            boolean existed = systemFamilyCursorDAO.checkExisted(userId, familyId);
-            int fromCursorId = 0;
-            if (!existed) {
-                fromCursorId = eventDAO.getLeastMEINVId();
-//                fromCursorId = PropertiesConfiguration.getInstance().getIntValue(PropertiesKey.IMG_FIRST_ID);
-                systemFamilyCursorDAO.insert(userId, familyId, fromCursorId);
-            } else {
-                fromCursorId = systemFamilyCursorDAO.getCursorId(userId, familyId);
-            }
-
-            int toCursorId = 0;
-            // 获取下N条
-            List<EventVO> list = eventDAO.MEINVIdList(fromCursorId, 2);
-            for (EventVO eventVO : list) {
-                int eventUserId = eventVO.getUserId();
-
-                UserVO userVO = userDAO.getUserInfo(eventUserId);
-                String userHeadFileName = userVO.getImg();
-                String userHeadUrl = PropertiesConfiguration.getInstance().getStringValue(PropertiesKey.USER_HEAD_PATH) + File.separator + userHeadFileName;
-                EventSimpleGetResp getResp = new EventSimpleGetResp();
-
-                TripleImgContentVO vo = eventHelper.getMVTriplerImgContent(eventVO);
-                getResp.setContent(vo);
-                getResp.setType(Constants.EventType.MEINV);
-                getResp.setUserHeadUrl(userHeadUrl);
-                getResp.setTitle(vo.getTitle());
-                getResp.setId(eventVO.getId());
-                resp.getList().add(getResp);
-                toCursorId = eventVO.getId();
-            }
-
-            // update new cursor
-            systemFamilyCursorDAO.update(userId, familyId, toCursorId);
-        }
-        return resp;
-    }
 
 
     @Action(name = "event.add", desc = "添加event")
@@ -113,30 +69,6 @@ public class EventFacade {
     }
 
 
-    @Action(name = "event.get", desc = "")
-    public EventGetResp get(CommandContext ctxt, EventGetReq req) {
-        EventGetResp resp = new EventGetResp();
-        if (req.getFamilyId() == Constants.EventType.MEINV) {
-
-            EventVO vo = eventDAO.get(req.getEventId());
-            UserVO userVO = userDAO.getUserNameAndImg(vo.getUserId());
-
-            vo.setUserName(userVO.getNickName());
-            vo.setUserImgUrl(imgHelper.getUserHeadUrl(userVO.getImg()));
-            int mvAlbumId = new Integer(vo.getContent());
-            List<MVImgVO> imgList = MVImgDAO.list(mvAlbumId);
-            MVAlbumVO mvAlbumVO = MVAlbumDAO.getMVAlbum(mvAlbumId);
-            TripleDetailContent c = new TripleDetailContent();
-            for (MVImgVO MVImgVO : imgList) {
-                String url = imgHelper.getEventImgUrl(mvAlbumVO.getRemoteAlbumId(), MVImgVO.getRemoteImgId());
-                c.getImgList().add(url);
-            }
-            BeanUtils.copyProperties(resp, vo);
-            resp.setContent(c.getImgList());
-            resp.setTitle(mvAlbumVO.getTitle());
-        }
-        return resp;
-    }
 
 
     @Action(name = "event.userAction", desc = "")

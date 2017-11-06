@@ -43,8 +43,8 @@ public class MVAlbumDAO {
 
     public int addMVAlbum(final MVAlbumVO info) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String sql = "insert into mv_album(source_id,remote_album_id,tag_id,title,createtime,updatetime) values " +
-                "(?,?,?,?,now(),now())";
+        final String sql = "insert into mv_album(source_id,remote_album_id,tag_id,title,createtime,updatetime,user_id) values " +
+                "(?,?,?,?,now(),now(),?)";
         j.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -53,6 +53,7 @@ public class MVAlbumDAO {
                 pstmt.setInt(2, info.getRemoteAlbumId());
                 pstmt.setInt(3, info.getTagId());
                 pstmt.setString(4, info.getTitle());
+                pstmt.setInt(5, info.getUserId());
                 return pstmt;
             }
         }, holder);
@@ -73,7 +74,7 @@ public class MVAlbumDAO {
     }
 
     public MVAlbumVO getMVAlbum(int mvAlbumId) {
-        String sql = "select a.source_id,fs.name,a.remote_album_id,a.tag_id,`at`.name,a.title from mv_album a " +
+        String sql = "select a.source_id,fs.name,a.remote_album_id,a.tag_id,`at`.name,a.title,a.user_id from mv_album a " +
                 "left outer join fetch_source fs on fs.id=a.source_id " +
                 "left outer join mv_album_tag `at` on `at`.id=a.tag_id " +
                 "where a.id=?";
@@ -87,6 +88,7 @@ public class MVAlbumDAO {
                 ai.setTagId(rs.getInt(4));
                 ai.setTagName(rs.getString(5));
                 ai.setTitle(rs.getString(6));
+                ai.setUserId(rs.getInt(7));
                 return ai;
             }
         });
@@ -99,4 +101,21 @@ public class MVAlbumDAO {
     }
 
 
+    public List<MVAlbumVO> MEINVIdList(int fromCursorId, int i) {
+        String sql = "select id,user_id,title,praise,share,remote_album_id from mv_album where id>? order by id limit ?;";
+        return j.query(sql, new Object[]{fromCursorId, i}, new RowMapper<MVAlbumVO>() {
+            @Override
+            public MVAlbumVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                MVAlbumVO vo = new MVAlbumVO();
+                vo.setId(rs.getInt(1));
+                vo.setUserId(rs.getInt(2));
+                vo.setTitle(rs.getString(3));
+                vo.setPraise(rs.getInt(4));
+                vo.setShare(rs.getInt(5));
+                vo.setRemoteAlbumId(rs.getInt(6));
+                return vo;
+            }
+        });
+
+    }
 }
