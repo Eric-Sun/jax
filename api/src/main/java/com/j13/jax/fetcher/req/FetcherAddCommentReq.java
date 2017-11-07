@@ -9,6 +9,16 @@ public class FetcherAddCommentReq {
     private String content;
     @Parameter(desc = "")
     private int userId;
+    @Parameter(desc = "")
+    private int isHot;
+
+    public int getIsHot() {
+        return isHot;
+    }
+
+    public void setIsHot(int isHot) {
+        this.isHot = isHot;
+    }
 
     public int getUserId() {
         return userId;

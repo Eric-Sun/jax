@@ -1,16 +1,19 @@
 package com.j13.jax.facade;
 
+import com.j13.jax.core.ErrorCode;
 import com.j13.jax.dao.*;
 import com.j13.jax.fetcher.req.FetcherGetAlbumReq;
 import com.j13.jax.fetcher.resp.FetcherGetAlbumResp;
 import com.j13.jax.fetcher.resp.*;
 import com.j13.jax.service.FetcherSourceService;
 import com.j13.jax.fetcher.req.*;
+import com.j13.jax.utils.MD5Util;
 import com.j13.jax.vo.MVAlbumVO;
 import com.j13.jax.vo.MVImgVO;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.core.CommandContext;
 import com.j13.poppy.core.CommonResultResp;
+import com.j13.poppy.exceptions.CommonException;
 import com.j13.poppy.util.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,9 +148,14 @@ public class FetcherFacade {
         int userId = req.getUserId();
         int sourceId = req.getSourceId();
         String content = req.getContent();
-        int sourceDZId = req.getSourceDZId();
+        String sourceDZId = req.getSourceDZId();
+        String md5 = MD5Util.getMD5String(req.getContent());
+        if (dzdao.checkExisted(md5)) {
+            LOG.info("dz exited. sourceId={}, sourceDZId={}", sourceId, sourceDZId);
+            throw new CommonException(ErrorCode.Fetcher.DZ_EXISTED);
+        }
 
-        int dzId = dzdao.add(userId, sourceId, sourceDZId, content);
+        int dzId = dzdao.add(userId, sourceId, sourceDZId, content, md5);
         LOG.info("dz added. id={}", dzId);
 
         FetcherDZAddResp resp = new FetcherDZAddResp();
@@ -162,8 +170,9 @@ public class FetcherFacade {
         int userId = req.getUserId();
         int dzId = req.getDzId();
         String content = req.getContent();
+        int isHot = req.getIsHot();
 
-        int dzCommentId = dzCommentDAO.add(userId, dzId, content);
+        int dzCommentId = dzCommentDAO.add(userId, dzId, content, isHot);
         LOG.info("comment added. id={}", dzCommentId);
         resp.setDzCommentId(dzCommentId);
 

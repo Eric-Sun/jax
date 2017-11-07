@@ -16,5 +16,9 @@ public class ErrorCode {
         public static int EXISTED = 4001;
     }
 
+    public static class Fetcher{
+        public static int DZ_EXISTED=5001;
+    }
+
 
 }

@@ -17,3 +17,11 @@ family表中 改head_img_id,cover_img_id
 整体把mv和dz从event中剥离出来
 fetch把mv的内容值插入到mv_*的表中，不插入到event中
 获取mv和dz的时候就是查询相关的mv*和dz*的表
+
+
+#3 2017.11.6
+dz_comment add column named is_hot,praise,share
+update table dz change column source source_id int
+change dz_comment content 2048
+dz_comment delete deleted int
+

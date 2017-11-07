@@ -10,7 +10,7 @@ public class FetcherDZAddReq {
     @Parameter(desc = "")
     private int sourceId;
     @Parameter(desc = "")
-    private int sourceDZId;
+    private String sourceDZId;
 
     public String getContent() {
         return content;
@@ -20,11 +20,11 @@ public class FetcherDZAddReq {
         this.content = content;
     }
 
-    public int getSourceDZId() {
+    public String getSourceDZId() {
         return sourceDZId;
     }
 
-    public void setSourceDZId(int sourceDZId) {
+    public void setSourceDZId(String sourceDZId) {
         this.sourceDZId = sourceDZId;
     }
 
