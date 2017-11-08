@@ -151,7 +151,7 @@ public class FetcherFacade {
         String sourceDZId = req.getSourceDZId();
         String md5 = MD5Util.getMD5String(req.getContent());
         if (dzdao.checkExisted(md5)) {
-            LOG.info("dz exited. sourceId={}, sourceDZId={}", sourceId, sourceDZId);
+            LOG.info("dz exited. sourceId={}, sourceDZId={},md5={}", new Object[]{sourceId, sourceDZId, md5});
             throw new CommonException(ErrorCode.Fetcher.DZ_EXISTED);
         }
 

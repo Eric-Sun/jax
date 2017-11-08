@@ -69,11 +69,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="DZCommentDAO.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZCommentDAO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.88235295" vertical-offset="15" max-vertical-offset="810">
+              <caret line="31" column="17" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
+              <folding>
+                <element signature="e#1030#1512#0" expanded="true" />
+                <element signature="e#1511#1512#0" expanded="true" />
+                <marker date="1510025896000" expanded="true" signature="827:935" placeholder="insert into ..." />
+                <marker date="1510025896000" expanded="true" signature="1660:1818" placeholder="select id,us..dz_comment..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="DZFacade.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/DZFacade.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1050" max-vertical-offset="1635">
-              <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="1635">
+              <caret line="85" column="27" selection-start-line="85" selection-start-column="27" selection-end-line="85" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -81,26 +96,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DZDAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZDAO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="540" max-vertical-offset="1125">
-              <caret line="58" column="92" selection-start-line="58" selection-start-column="92" selection-end-line="58" selection-end-column="92" />
-              <folding>
-                <element signature="e#2346#2780#0" expanded="true" />
-                <element signature="e#2779#2780#0" expanded="true" />
-                <marker date="1510045719000" expanded="true" signature="896:1032" placeholder="insert into ..." />
-                <marker date="1510045719000" expanded="true" signature="1717:1766" placeholder="select count..dz..." />
-                <marker date="1510045719000" expanded="true" signature="1973:2010" placeholder="select id fr..dz..." />
-                <marker date="1510045719000" expanded="true" signature="2166:2228" placeholder="select id,us..dz..." />
-                <marker date="1510045719000" expanded="true" signature="2166:2258" placeholder="select id,us..dz..." />
-                <marker date="1510045719000" expanded="true" signature="2844:2915" placeholder="select id,us..dz..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="change.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="change.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/change.md">
           <provider editor-type-id="MultiMarkdownFxHtmlEditor">
             <state />
@@ -109,24 +105,9 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.69803923" vertical-offset="167" max-vertical-offset="495">
-              <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+            <state vertical-scroll-proportion="-4.0" vertical-offset="240" max-vertical-offset="495">
+              <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DZCommentDAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZCommentDAO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="810">
-              <caret line="55" column="117" selection-start-line="55" selection-start-column="41" selection-end-line="55" selection-end-column="41" />
-              <folding>
-                <element signature="e#1905#2475#0" expanded="true" />
-                <element signature="e#2474#2475#0" expanded="true" />
-                <marker date="1510025896000" expanded="true" signature="827:935" placeholder="insert into ..." />
-                <marker date="1510025896000" expanded="true" signature="1660:1818" placeholder="select id,us..dz_comment..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -188,7 +169,6 @@
         <option value="$PROJECT_DIR$/core/src/main/java/com/j13/jax/core/ErrorCode.java" />
         <option value="$PROJECT_DIR$/api/src/main/java/com/j13/jax/fetcher/req/FetcherAddCommentReq.java" />
         <option value="$PROJECT_DIR$/api/src/main/java/com/j13/jax/fetcher/req/FetcherDZAddReq.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/FetcherFacade.java" />
         <option value="$PROJECT_DIR$/api/src/main/java/com/j13/jax/dz/req/DZGetReq.java" />
         <option value="$PROJECT_DIR$/api/src/main/java/com/j13/jax/dz/resp/CommentGetResp.java" />
         <option value="$PROJECT_DIR$/api/src/main/java/com/j13/jax/dz/resp/DZListResp.java" />
@@ -200,6 +180,7 @@
         <option value="$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/DZFacade.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZDAO.java" />
         <option value="$PROJECT_DIR$/core/change.md" />
+        <option value="$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/FetcherFacade.java" />
       </list>
     </option>
   </component>
@@ -558,44 +539,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="facade" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jax" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jax" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="j13" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jax" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dao" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1498,12 +1441,12 @@
       <workItem from="1509452745991" duration="227000" />
       <workItem from="1509699957870" duration="4561000" />
       <workItem from="1509786464030" duration="8678000" />
-      <workItem from="1509971218639" duration="3550000" />
+      <workItem from="1509971218639" duration="7498000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="417751000" />
+    <option name="totallyTimeSpent" value="421699000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1526,7 +1469,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="724" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="724" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1656,19 +1599,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/api/src/main/java/com/j13/jax/fetcher/resp/FetcherDZAddResp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12975779" vertical-offset="0" max-vertical-offset="578">
-          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
-          <folding>
-            <element signature="e#177#178#0" expanded="false" />
-            <element signature="e#204#205#0" expanded="false" />
-            <element signature="e#241#242#0" expanded="false" />
-            <element signature="e#273#274#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/CommentDAO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.11764706" vertical-offset="637" max-vertical-offset="1365">
@@ -1930,6 +1860,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.57894737" vertical-offset="135" max-vertical-offset="570">
           <caret line="26" column="31" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <element signature="e#736#737#0" expanded="false" />
+            <element signature="e#776#777#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1954,16 +1888,6 @@
         <state vertical-scroll-proportion="0.12975779" vertical-offset="0" max-vertical-offset="578">
           <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/FetcherFacade.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4031142" vertical-offset="2212" max-vertical-offset="2835">
-          <caret line="163" column="5" selection-start-line="163" selection-start-column="5" selection-end-line="163" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2044,9 +1968,9 @@
         <state vertical-scroll-proportion="0.38927335" vertical-offset="15" max-vertical-offset="990">
           <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
           <folding>
-            <element signature="e#419#420#0" expanded="true" />
-            <element signature="e#469#470#0" expanded="true" />
-            <element signature="e#513#514#0" expanded="true" />
+            <element signature="e#419#420#0" expanded="false" />
+            <element signature="e#469#470#0" expanded="false" />
+            <element signature="e#513#514#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2069,38 +1993,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="540" max-vertical-offset="1125">
-          <caret line="58" column="92" selection-start-line="58" selection-start-column="92" selection-end-line="58" selection-end-column="92" />
+        <state vertical-scroll-proportion="0.6617647" vertical-offset="75" max-vertical-offset="1080">
+          <caret line="33" column="25" selection-start-line="33" selection-start-column="25" selection-end-line="33" selection-end-column="25" />
           <folding>
-            <element signature="e#2346#2780#0" expanded="true" />
-            <element signature="e#2779#2780#0" expanded="true" />
-            <marker date="1510045719000" expanded="true" signature="896:1032" placeholder="insert into ..." />
-            <marker date="1510045719000" expanded="true" signature="1717:1766" placeholder="select count..dz..." />
-            <marker date="1510045719000" expanded="true" signature="1973:2010" placeholder="select id fr..dz..." />
-            <marker date="1510045719000" expanded="true" signature="2166:2228" placeholder="select id,us..dz..." />
-            <marker date="1510045719000" expanded="true" signature="2166:2258" placeholder="select id,us..dz..." />
-            <marker date="1510045719000" expanded="true" signature="2844:2915" placeholder="select id,us..dz..." />
+            <marker date="1510045719000" expanded="true" signature="-1:-1" placeholder="insert into ..." />
+            <marker date="1510045719000" expanded="true" signature="-1:-1" placeholder="select count..dz..." />
+            <marker date="1510045719000" expanded="true" signature="-1:-1" placeholder="select id fr..dz..." />
+            <marker date="1510045719000" expanded="true" signature="-1:-1" placeholder="select id,us..dz..." />
+            <marker date="1510045719000" expanded="true" signature="-1:-1" placeholder="select id,us..dz..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZCommentDAO.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-sources.jar!/org/slf4j/Logger.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="810">
-          <caret line="55" column="117" selection-start-line="55" selection-start-column="41" selection-end-line="55" selection-end-column="41" />
-          <folding>
-            <element signature="e#1905#2475#0" expanded="true" />
-            <element signature="e#2474#2475#0" expanded="true" />
-            <marker date="1510025896000" expanded="true" signature="827:935" placeholder="insert into ..." />
-            <marker date="1510025896000" expanded="true" signature="1660:1818" placeholder="select id,us..dz_comment..." />
-          </folding>
+        <state vertical-scroll-proportion="0.22807017" vertical-offset="6340" max-vertical-offset="10575">
+          <caret line="449" column="14" selection-start-line="449" selection-start-column="14" selection-end-line="449" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/FetcherFacade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.7754385" vertical-offset="1504" max-vertical-offset="2565">
+          <caret line="152" column="24" selection-start-line="152" selection-start-column="24" selection-end-line="152" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/facade/DZFacade.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1050" max-vertical-offset="1635">
-          <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="1635">
+          <caret line="85" column="27" selection-start-line="85" selection-start-column="27" selection-end-line="85" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -2115,9 +2039,22 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.69803923" vertical-offset="167" max-vertical-offset="495">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+        <state vertical-scroll-proportion="-4.0" vertical-offset="240" max-vertical-offset="495">
+          <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/j13/jax/dao/DZCommentDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.88235295" vertical-offset="15" max-vertical-offset="810">
+          <caret line="31" column="17" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
+          <folding>
+            <element signature="e#1030#1512#0" expanded="true" />
+            <element signature="e#1511#1512#0" expanded="true" />
+            <marker date="1510025896000" expanded="true" signature="827:935" placeholder="insert into ..." />
+            <marker date="1510025896000" expanded="true" signature="1660:1818" placeholder="select id,us..dz_comment..." />
+          </folding>
         </state>
       </provider>
     </entry>
