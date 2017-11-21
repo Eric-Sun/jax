@@ -112,6 +112,7 @@ public class MVFacade {
         BeanUtils.copyProperties(resp, mvAlbumVO);
         resp.setContent(c.getImgList());
         resp.setTitle(mvAlbumVO.getTitle());
+        resp.setType(-1);
         return resp;
     }
 

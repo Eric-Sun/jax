@@ -6,6 +6,7 @@ import com.j13.poppy.anno.Parameter;
 import java.util.List;
 
 public class DZGetResp {
+    private int type= -2;
     @Parameter(desc = "")
     private int dzId;
     @Parameter(desc = "")
@@ -22,6 +23,14 @@ public class DZGetResp {
     private int share;
     private List<CommentGetResp> topList = Lists.newLinkedList();
     private List<CommentGetResp> recentList = Lists.newLinkedList();
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public List<CommentGetResp> getRecentList() {
         return recentList;

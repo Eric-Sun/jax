@@ -3,9 +3,11 @@ package com.j13.jax.facade;
 import com.j13.jax.core.Constants;
 import com.j13.jax.core.PropertiesKey;
 import com.j13.jax.dao.*;
+import com.j13.jax.dz.req.DZAddCommentReq;
 import com.j13.jax.dz.req.DZGetReq;
 import com.j13.jax.dz.req.DZListReq;
 import com.j13.jax.dz.resp.CommentGetResp;
+import com.j13.jax.dz.resp.DZAddCommentResp;
 import com.j13.jax.dz.resp.DZGetResp;
 import com.j13.jax.dz.resp.DZListResp;
 import com.j13.jax.mv.resp.MVSimpleGetResp;
@@ -60,6 +62,7 @@ public class DZFacade {
 
             BeanUtils.copyProperties(getResp, dzvo);
             getResp.setUserHeadUrl(userHeadUrl);
+            getResp.setUserName(userVO.getNickName());
             listResp.getList().add(getResp);
             toCursorId = dzvo.getDzId();
         }
@@ -68,6 +71,7 @@ public class DZFacade {
         systemFamilyCursorDAO.update(userId, familyId, toCursorId);
         return listResp;
     }
+
 
     @Action(name = "dz.get", desc = "")
     public DZGetResp get(CommandContext ctxt, DZGetReq req) {
@@ -99,5 +103,13 @@ public class DZFacade {
         return getResp;
     }
 
+
+    @Action(name = "dz.addComment", desc = "")
+    public DZAddCommentResp addComment(CommandContext ctxt, DZAddCommentReq req) {
+        int dzCommentId = dzCommentDAO.add(ctxt.getUid(), req.getDzId(), req.getContent(), 0);
+        DZAddCommentResp resp = new DZAddCommentResp();
+        resp.setDzCommentId(dzCommentId);
+        return resp;
+    }
 
 }
