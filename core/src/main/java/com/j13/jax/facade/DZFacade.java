@@ -1,21 +1,23 @@
 package com.j13.jax.facade;
 
 import com.j13.jax.core.Constants;
+import com.j13.jax.core.ErrorCode;
 import com.j13.jax.core.PropertiesKey;
 import com.j13.jax.dao.*;
 import com.j13.jax.dz.req.DZAddCommentReq;
+import com.j13.jax.dz.req.DZCollectReq;
 import com.j13.jax.dz.req.DZGetReq;
 import com.j13.jax.dz.req.DZListReq;
-import com.j13.jax.dz.resp.CommentGetResp;
-import com.j13.jax.dz.resp.DZAddCommentResp;
-import com.j13.jax.dz.resp.DZGetResp;
-import com.j13.jax.dz.resp.DZListResp;
+import com.j13.jax.dz.resp.*;
 import com.j13.jax.mv.resp.MVSimpleGetResp;
 import com.j13.jax.vo.*;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.config.PropertiesConfiguration;
 import com.j13.poppy.core.CommandContext;
+import com.j13.poppy.exceptions.CommonException;
 import com.j13.poppy.util.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Component
 public class DZFacade {
+    private static Logger LOG = LoggerFactory.getLogger(DZFacade.class);
 
     @Autowired
     UserDAO userDAO;
@@ -33,7 +36,8 @@ public class DZFacade {
     DZCommentDAO dzCommentDAO;
     @Autowired
     SystemFamilyCursorDAO systemFamilyCursorDAO;
-
+    @Autowired
+    CollectionDAO collectionDAO;
 
     @Action(name = "dz.list", desc = "")
     public DZListResp list(CommandContext ctxt, DZListReq req) {
@@ -111,5 +115,21 @@ public class DZFacade {
         resp.setDzCommentId(dzCommentId);
         return resp;
     }
+
+    @Action(name = "dz.collect", desc = "")
+    public DZCollectResp collect(CommandContext ctxt, DZCollectReq req) {
+        int dzId = req.getDzId();
+        int uid = ctxt.getUid();
+
+        if (collectionDAO.checkExists(uid, dzId, Constants.CollectionType.DZ)) {
+            throw new CommonException(ErrorCode.Collection.COLLECTED);
+        }
+        int collectionId = collectionDAO.add(uid, Constants.CollectionType.DZ, dzId);
+        LOG.info("dz collect successfully. collectionId = {}", collectionId);
+        DZCollectResp resp = new DZCollectResp();
+        resp.setCollectionId(collectionId);
+        return resp;
+    }
+
 
 }

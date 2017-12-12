@@ -50,6 +50,9 @@ public class ImgHelper {
 
         try {
             InputStream in = item.getInputStream();
+            File targetFile = new File(localFile);
+            if(!targetFile.exists())
+                targetFile.createNewFile();
             FileOutputStream out = new FileOutputStream(localFile);
             byte buffer[] = new byte[1024];
             //判断输入流中的数据是否已经读完的标识

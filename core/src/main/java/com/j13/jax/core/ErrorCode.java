@@ -25,5 +25,9 @@ public class ErrorCode {
         public static int USER_MOBILE_EXISTED = 1502;
     }
 
+    public static class Collection {
+        public static int COLLECTED = 1601;
+    }
+
 
 }

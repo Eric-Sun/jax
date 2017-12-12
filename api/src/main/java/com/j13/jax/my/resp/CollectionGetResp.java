@@ -5,6 +5,15 @@ public class CollectionGetResp {
     private int type;
     private Object resourceObj;
     private long createtime;
+    private int resourceId;
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
+    }
 
     public long getCreatetime() {
         return createtime;

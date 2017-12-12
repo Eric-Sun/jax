@@ -62,5 +62,7 @@ public class Constants {
     public static class CollectionType {
         public static int EVENT = 0;
         public static int COMMENT = 1;
+        public static int MV = -1;
+        public static int DZ = -2;
     }
 }

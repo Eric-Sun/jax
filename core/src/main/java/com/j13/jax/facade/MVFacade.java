@@ -1,15 +1,20 @@
 package com.j13.jax.facade;
 
 import com.j13.jax.core.Constants;
+import com.j13.jax.core.ErrorCode;
 import com.j13.jax.core.PropertiesKey;
 import com.j13.jax.dao.*;
+import com.j13.jax.dz.req.DZCollectReq;
+import com.j13.jax.dz.resp.DZCollectResp;
 import com.j13.jax.event.req.EventGetReq;
 import com.j13.jax.event.req.EventListReq;
 import com.j13.jax.event.resp.EventGetResp;
 import com.j13.jax.event.resp.EventListResp;
 import com.j13.jax.event.resp.EventSimpleGetResp;
+import com.j13.jax.mv.req.MVCollectReq;
 import com.j13.jax.mv.req.MVGetReq;
 import com.j13.jax.mv.req.MVListReq;
+import com.j13.jax.mv.resp.MVCollectResp;
 import com.j13.jax.mv.resp.MVGetResp;
 import com.j13.jax.mv.resp.MVListResp;
 import com.j13.jax.mv.resp.MVSimpleGetResp;
@@ -19,7 +24,10 @@ import com.j13.jax.vo.*;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.config.PropertiesConfiguration;
 import com.j13.poppy.core.CommandContext;
+import com.j13.poppy.exceptions.CommonException;
 import com.j13.poppy.util.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +36,7 @@ import java.util.List;
 
 @Component
 public class MVFacade {
+    private static Logger LOG = LoggerFactory.getLogger(MVFacade.class);
 
     @Autowired
     SystemFamilyCursorDAO systemFamilyCursorDAO;
@@ -113,6 +122,22 @@ public class MVFacade {
         resp.setContent(c.getImgList());
         resp.setTitle(mvAlbumVO.getTitle());
         resp.setType(-1);
+        return resp;
+    }
+
+
+    @Action(name = "mv.collect", desc = "")
+    public MVCollectResp collect(CommandContext ctxt, MVCollectReq req) {
+        int mvId = req.getMvId();
+        int uid = ctxt.getUid();
+
+        if (collectionDAO.checkExists(uid, mvId, Constants.CollectionType.MV)) {
+            throw new CommonException(ErrorCode.Collection.COLLECTED);
+        }
+        int collectionId = collectionDAO.add(uid, Constants.CollectionType.MV, mvId);
+        LOG.info("mv collect successfully. collectionId = {}", collectionId);
+        MVCollectResp resp = new MVCollectResp();
+        resp.setCollectionId(collectionId);
         return resp;
     }
 
