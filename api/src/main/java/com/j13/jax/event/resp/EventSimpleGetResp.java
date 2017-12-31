@@ -11,8 +11,18 @@ public class EventSimpleGetResp {
     private Object content;
     @Parameter(desc="用户头像地址")
     private String userHeadUrl;
+    @Parameter(desc="用户昵称")
+    private String userName;
     @Parameter(desc="")
     private int id;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public int getId() {
         return id;

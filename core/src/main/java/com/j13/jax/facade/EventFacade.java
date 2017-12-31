@@ -49,8 +49,6 @@ public class EventFacade {
     FamilyDAO familyDAO;
 
 
-
-
     @Action(name = "event.add", desc = "添加event")
     public CommonResultResp add(CommandContext ctxt, EventAddReq req) {
 
@@ -67,8 +65,6 @@ public class EventFacade {
 
         return CommonResultResp.success();
     }
-
-
 
 
     @Action(name = "event.userAction", desc = "")
@@ -95,5 +91,49 @@ public class EventFacade {
         collectionDAO.add(ctxt.getUid(), Constants.CollectionType.EVENT, eventId);
         LOG.info("add collection . type=event, eventId={},userId", eventId, ctxt.getUid());
         return CommonResultResp.success();
+    }
+
+
+    @Action(name = "event.list", desc = "获取某一个family的部分event")
+    public EventListResp list(CommandContext ctxt, EventListReq req) {
+        EventListResp resp = new EventListResp();
+        int familyid = req.getFamilyId();
+        int pageNum = req.getPageNum();
+
+        List<EventVO> eventList = eventDAO.list(familyid, pageNum, 5);
+        for (EventVO eventVO : eventList) {
+            EventSimpleGetResp getResp = new EventSimpleGetResp();
+            BeanUtils.copyProperties(getResp, eventVO);
+            int userId = eventVO.getUserId();
+            UserVO userVO = userDAO.getUserInfo(userId);
+            String userHeadUrl = imgHelper.getUserHeadUrl(userVO.getImg());
+            String userName = userVO.getNickName();
+
+            getResp.setUserHeadUrl(userHeadUrl);
+            getResp.setUserName(userName);
+            resp.getList().add(getResp);
+        }
+
+        return resp;
+
+    }
+
+
+    @Action(name = "event.get", desc = "")
+    public EventGetResp get(CommandContext ctxt, EventGetReq req) {
+        EventGetResp resp = new EventGetResp();
+        int eventId = req.getEventId();
+        int familyId = req.getFamilyId();
+
+        EventVO eventVO = eventDAO.get(eventId, familyId);
+        BeanUtils.copyProperties(resp, eventVO);
+
+        UserVO userVO = userDAO.getUserInfo(eventVO.getUserId());
+        String userImgUrl = imgHelper.getUserHeadUrl(userVO.getImg());
+
+        resp.setUserName(userVO.getNickName());
+        resp.setUserImgUrl(userImgUrl);
+
+        return resp;
     }
 }
