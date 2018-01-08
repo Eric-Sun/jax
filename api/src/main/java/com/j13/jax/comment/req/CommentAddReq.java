@@ -11,7 +11,8 @@ public class CommentAddReq {
     @Parameter(desc = "")
     private int replyCId;
 
-    public String getContent() {
+    public String
+    getContent() {
         return content;
     }
 

@@ -2,6 +2,7 @@ package com.j13.jax.facade;
 
 import com.j13.jax.core.ErrorCode;
 import com.j13.jax.dao.UserDAO;
+import com.j13.jax.service.ImgHelper;
 import com.j13.jax.user.req.UserMobileLoginReq;
 import com.j13.jax.user.req.UserMobileRegisterReq;
 import com.j13.jax.user.req.UserRandomUserReq;
@@ -21,6 +22,8 @@ public class UserFacade {
 
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    ImgHelper imgHelper;
 
     @Action(name = "user.randomUser", desc = "随机一个用户")
     public UserRandomUserResp randomUser(CommandContext ctxt, UserRandomUserReq req) {
@@ -42,6 +45,8 @@ public class UserFacade {
             throw new CommonException(ErrorCode.User.USER_LOGIN_ERROR);
         }
         resp.setUserId(userVO.getId());
+        resp.setUserHeadUrl(imgHelper.getUserHeadUrl(userVO.getImg()));
+        resp.setUserName(userVO.getNickName());
         return resp;
     }
 

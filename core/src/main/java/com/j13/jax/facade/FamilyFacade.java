@@ -2,13 +2,11 @@ package com.j13.jax.facade;
 
 import com.j13.jax.dao.FamilyDAO;
 import com.j13.jax.dao.ImgDAO;
-import com.j13.jax.family.req.FamilyAddReq;
-import com.j13.jax.family.req.FamilyCreatedListReq;
-import com.j13.jax.family.req.FamilyDeleteReq;
-import com.j13.jax.family.req.FamilyGetReq;
+import com.j13.jax.family.req.*;
 import com.j13.jax.family.resp.FamilyAddResp;
 import com.j13.jax.family.resp.FamilyCreatedListResp;
 import com.j13.jax.family.resp.FamilyGetResp;
+import com.j13.jax.family.resp.FamilyListResp;
 import com.j13.jax.service.ImgHelper;
 import com.j13.jax.vo.FamilyVO;
 import com.j13.jax.vo.ImgVO;
@@ -27,6 +25,7 @@ import java.util.List;
 @Component
 public class FamilyFacade {
     private static Logger LOG = LoggerFactory.getLogger(FamilyFacade.class);
+    private static final int SIZE_PER_PAGE=10;
 
     @Autowired
     FamilyDAO familyDAO;
@@ -82,7 +81,7 @@ public class FamilyFacade {
     @Action(name = "family.createdList", desc = "查询用户创建的所有family的列表")
     public FamilyCreatedListResp createdList(CommandContext ctxt, FamilyCreatedListReq req) {
         FamilyCreatedListResp listResp = new FamilyCreatedListResp();
-        List<FamilyVO> list = familyDAO.createdList(ctxt.getUid(), req.getPageNum(), 10);
+        List<FamilyVO> list = familyDAO.createdList(ctxt.getUid(), req.getPageNum(), SIZE_PER_PAGE);
         for (FamilyVO familyVO : list) {
             FamilyGetResp getResp = new FamilyGetResp();
             BeanUtils.copyProperties(getResp, familyVO);
@@ -94,6 +93,29 @@ public class FamilyFacade {
         }
         return listResp;
     }
+
+    @Action(name="family.list",desc="获取所有参与的和创建的family的列表")
+    public FamilyListResp list(CommandContext ctxt, FamilyListReq req){
+        FamilyListResp resp = new FamilyListResp();
+        int userId = ctxt.getUid();
+        int pageNum = req.getPageNum();
+        List<FamilyVO> createdList = familyDAO.createdList(ctxt.getUid(), req.getPageNum(), SIZE_PER_PAGE);
+        List<FamilyVO> addedList = familyDAO.addedlist(userId,pageNum,SIZE_PER_PAGE);
+
+        createdList.addAll(addedList);
+        for (FamilyVO familyVO : createdList) {
+            FamilyGetResp getResp = new FamilyGetResp();
+            BeanUtils.copyProperties(getResp, familyVO);
+            ImgVO coverImg = imgDAO.get(familyVO.getCoverImgId());
+            ImgVO headImg = imgDAO.get(familyVO.getHeadImgId());
+            getResp.setHeadImgUrl(imgHelper.getFamilyHeadUrl(headImg.getFileName()));
+            getResp.setCoverImgUrl(imgHelper.getFamilyCoverUrl(coverImg.getFileName()));
+            resp.getList().add(getResp);
+        }
+        return resp;
+
+    }
+
 
 
 }

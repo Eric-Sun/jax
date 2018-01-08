@@ -104,4 +104,25 @@ public class FamilyDAO {
         String sql = "update family set topics=topics+? where id=? and deleted=?";
         return j.update(sql, new Object[]{count, familyId, Constants.DB.NOT_DELETED});
     }
+
+    public List<FamilyVO> addedlist(int userId, int pageNum, int sizePerPage) {
+        String sql = "select f.id,f.name,f.head_img_id,f.cover_img_id,f.brief,f.creator_user_id,f.createtime,f.members,f.topics from family f left outer join family_member fm on fm.family_id=f.id " +
+                " where fm.user_id=? and f.deleted=? limit ?,?";
+        return j.query(sql, new Object[]{userId, Constants.DB.NOT_DELETED, pageNum * sizePerPage, sizePerPage}, new RowMapper<FamilyVO>() {
+            @Override
+            public FamilyVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                FamilyVO vo = new FamilyVO();
+                vo.setId(rs.getInt(1));
+                vo.setName(rs.getString(2));
+                vo.setHeadImgId(rs.getInt(3));
+                vo.setCoverImgId(rs.getInt(4));
+                vo.setBrief(rs.getString(5));
+                vo.setCreatorUserId(rs.getInt(6));
+                vo.setCreatetime(rs.getDate(7).getTime());
+                vo.setMemberCount(rs.getInt(8));
+                vo.setTopicCount(rs.getInt(9));
+                return vo;
+            }
+        });
+    }
 }

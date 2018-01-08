@@ -63,13 +63,14 @@ public class UserDAO {
     }
 
     public UserVO mobileLogin(String mobile, String passwordAfterMD5) {
-        String sql = "select id,nick_name from user where mobile=? and password=? and deleted=?";
+        String sql = "select id,nick_name,img from user where mobile=? and password=? and deleted=?";
         return j.queryForObject(sql, new Object[]{mobile, passwordAfterMD5, Constants.DB.NOT_DELETED}, new RowMapper<UserVO>() {
             @Override
             public UserVO mapRow(ResultSet rs, int rowNum) throws SQLException {
                 UserVO vo = new UserVO();
                 vo.setId(rs.getInt(1));
                 vo.setNickName(rs.getString(2));
+                vo.setImg(rs.getString(3));
                 return vo;
             }
         });
