@@ -62,7 +62,7 @@ public class UserFacade {
         }
         int userId = userDAO.mobileRegister(mobile, passwordAfterMD5);
         resp.setUserId(userId);
-        resp.setNickName(mobile);
+        resp.setUserName(mobile);
         return resp;
     }
 

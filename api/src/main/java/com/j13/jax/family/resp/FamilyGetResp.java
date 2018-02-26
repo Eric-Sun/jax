@@ -17,6 +17,32 @@ public class FamilyGetResp {
     private int memberCount;
     @Parameter(desc="")
     private int topicCount;
+    @Parameter(desc="上次访问的时间")
+    private long visitTime;
+
+    public int getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public int getTopicCount() {
+        return topicCount;
+    }
+
+    public void setTopicCount(int topicCount) {
+        this.topicCount = topicCount;
+    }
+
+    public long getVisitTime() {
+        return visitTime;
+    }
+
+    public void setVisitTime(long visitTime) {
+        this.visitTime = visitTime;
+    }
 
     public String getBrief() {
         return brief;

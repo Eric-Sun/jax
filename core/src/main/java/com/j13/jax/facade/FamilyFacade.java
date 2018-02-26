@@ -1,6 +1,7 @@
 package com.j13.jax.facade;
 
 import com.j13.jax.dao.FamilyDAO;
+import com.j13.jax.dao.FamilyMemberDAO;
 import com.j13.jax.dao.ImgDAO;
 import com.j13.jax.family.req.*;
 import com.j13.jax.family.resp.FamilyAddResp;
@@ -25,7 +26,7 @@ import java.util.List;
 @Component
 public class FamilyFacade {
     private static Logger LOG = LoggerFactory.getLogger(FamilyFacade.class);
-    private static final int SIZE_PER_PAGE=10;
+    private static final int SIZE_PER_PAGE = 10;
 
     @Autowired
     FamilyDAO familyDAO;
@@ -33,19 +34,20 @@ public class FamilyFacade {
     ImgHelper imgHelper;
     @Autowired
     ImgDAO imgDAO;
+    @Autowired
+    FamilyMemberDAO familyMemberDAO;
 
-
-    @Action(name = "family.add", desc = "")
+    @Action(name = "family.add", desc = "创建一个family")
     public FamilyAddResp add(CommandContext ctxt, FamilyAddReq req) {
         FamilyAddResp resp = new FamilyAddResp();
         int familyId = familyDAO.add(req.getName(), req.getHeadImgId(),
                 req.getCoverImgId(), req.getBrief(), ctxt.getUid(), ctxt.getUid()
         );
+        familyMemberDAO.add(ctxt.getUid(), familyId);
         LOG.info("family add success. id={}", familyId);
         resp.setFamilyId(familyId);
         return resp;
     }
-
 
     @Action(name = "family.delete", desc = "")
     public CommonResultResp delete(CommandContext ctxt, FamilyDeleteReq req) {
@@ -54,6 +56,7 @@ public class FamilyFacade {
         int familyId = req.getFamilyId();
 
         int count = familyDAO.delete(uid, familyId);
+
         LOG.info("family deleted. id={}", familyId);
         return CommonResultResp.success();
     }
@@ -64,6 +67,8 @@ public class FamilyFacade {
         FamilyGetResp getResp = new FamilyGetResp();
         int uid = ctxt.getUid();
         int familyId = req.getFamilyId();
+        // add visit time
+        familyMemberDAO.setVisitTime(uid, familyId);
 
         FamilyVO familyVO = familyDAO.get(familyId);
 
@@ -94,28 +99,34 @@ public class FamilyFacade {
         return listResp;
     }
 
-    @Action(name="family.list",desc="获取所有参与的和创建的family的列表")
-    public FamilyListResp list(CommandContext ctxt, FamilyListReq req){
+    @Action(name = "family.list", desc = "获取所有参与的和创建的family的列表")
+    public FamilyListResp list(CommandContext ctxt, FamilyListReq req) {
         FamilyListResp resp = new FamilyListResp();
         int userId = ctxt.getUid();
         int pageNum = req.getPageNum();
         List<FamilyVO> createdList = familyDAO.createdList(ctxt.getUid(), req.getPageNum(), SIZE_PER_PAGE);
-        List<FamilyVO> addedList = familyDAO.addedlist(userId,pageNum,SIZE_PER_PAGE);
+        List<FamilyVO> addedList = familyDAO.addedlist(userId, pageNum, SIZE_PER_PAGE);
 
         createdList.addAll(addedList);
         for (FamilyVO familyVO : createdList) {
             FamilyGetResp getResp = new FamilyGetResp();
             BeanUtils.copyProperties(getResp, familyVO);
+            getResp.setFamilyId(familyVO.getId());
             ImgVO coverImg = imgDAO.get(familyVO.getCoverImgId());
             ImgVO headImg = imgDAO.get(familyVO.getHeadImgId());
-            getResp.setHeadImgUrl(imgHelper.getFamilyHeadUrl(headImg.getFileName()));
+//            getResp.setHeadImgUrl(imgHelper.getFamilyHeadUrl(headImg.getFileName()));
+            getResp.setHeadImgUrl("http://123.56.86.200/1470584630718.jpg");
             getResp.setCoverImgUrl(imgHelper.getFamilyCoverUrl(coverImg.getFileName()));
+
+            long visitTime = familyMemberDAO.getVisitTime(userId, familyVO.getId());
+            int memberCount = familyMemberDAO.getMemberCount(familyVO.getId());
+            getResp.setVisitTime(visitTime);
+            getResp.setMemberCount(memberCount);
             resp.getList().add(getResp);
         }
         return resp;
 
     }
-
 
 
 }
